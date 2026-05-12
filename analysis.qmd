@@ -1,0 +1,129 @@
+---
+title: "Mariners 2026 — A Differential Analysis"
+subtitle: "Coder + Positron demo, by way of baseball"
+author: "Benaroya Bioinformatics"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    code-fold: show
+    embed-resources: true
+    theme: cosmo
+execute:
+  warning: false
+  message: false
+---
+
+## The pitch
+
+Bioinformatics workflows boil down to a small set of motifs: load a matrix,
+normalize it, look for structure, and call out the rows or columns that don't
+behave like the rest. The same motifs work fine on baseball, and baseball has
+the advantage of being immediately legible — you don't need to know what a
+gene does to recognize a player having a hot month.
+
+This notebook walks through four canonical visualisations against the 2026
+Seattle Mariners, six weeks into the season:
+
+| Bioinformatics view              | Baseball mapping                                |
+|----------------------------------|-------------------------------------------------|
+| count / expression matrix        | player × stat table                             |
+| z-scored heatmap with clustering | offensive profile heatmap                       |
+| volcano plot                     | observed wOBA vs Statcast xwOBA, sized by PA    |
+| PCA on samples                   | player profile embedding, coloured by position  |
+
+## Environment
+
+Reproducibility is handled with [`renv`](https://rstudio.github.io/renv/).
+Open the project in **Positron**, run `renv::restore()` once, and every
+package version below is pinned to the lockfile checked into the repo.
+
+```{r setup}
+source(here::here("R", "00_setup.R"))
+```
+
+## 1 · Load the matrix
+
+```{r fetch}
+source(here::here("R", "01_fetch_data.R"))
+batting  <- readRDS(here("data", "batting_2026.rds"))
+pitching <- readRDS(here("data", "pitching_2026.rds"))
+
+batting |> dplyr::arrange(dplyr::desc(pa)) |> head(8) |> knitr::kable(digits = 3)
+```
+
+The fetch step prefers the live MLB Stats API via `baseballr::mlb_team_stats()`.
+When the call fails — offline laptop, rate limit, conference Wi-Fi — it falls
+back to a deterministic synthetic dataset so the rest of the notebook
+always renders. Same pattern you'd use to ship a teaching notebook that
+doesn't need a live database connection.
+
+## 2 · Heatmap
+
+```{r heatmap, fig.width = 10, fig.height = 7}
+source(here::here("R", "02_heatmap.R"))
+knitr::include_graphics(here("figures", "02_heatmap.png"))
+```
+
+Read this exactly like an expression heatmap: columns are samples (players),
+rows are features (offensive rate stats), values are within-feature z-scores.
+The dendrogram on the top axis is the same hierarchical clustering you'd run
+on a cohort — players with similar offensive profiles end up adjacent.
+
+## 3 · Volcano plot
+
+```{r volcano, fig.width = 9, fig.height = 6}
+source(here::here("R", "03_volcano.R"))
+knitr::include_graphics(here("figures", "03_volcano.png"))
+```
+
+The x-axis is **effect size**: observed wOBA minus the Statcast expected
+wOBA (`xwOBA`) derived from each player's batted-ball profile (exit
+velocity, launch angle, sprint speed on grounders). The y-axis is the
+**significance** of that gap given the player's plate appearances so far —
+small samples sit near the floor; players who have separated from their
+own expected line over a meaningful number of PAs get pushed up.
+
+The cosmetic dashed gates are at ±0.020 wOBA and p < 0.05. Points outside
+those gates are the season's "differentially expressed" hitters.
+
+## 4 · PCA
+
+```{r pca, fig.width = 9, fig.height = 6.5}
+source(here::here("R", "04_pca.R"))
+knitr::include_graphics(here("figures", "04_pca.png"))
+```
+
+Same biplot you'd produce from `prcomp()` on a count matrix: the player
+scores cluster by offensive profile, and the feature loadings (the grey
+arrows) tell you which stats are driving each axis. PC1 typically
+separates power from on-base; PC2 picks up the strikeout/contact axis.
+
+## 5 · Pitching staff as a sanity check
+
+```{r pitching, fig.width = 9, fig.height = 5}
+pitching |>
+  dplyr::arrange(era) |>
+  dplyr::mutate(player = forcats::fct_inorder(player)) |>
+  ggplot(aes(x = player, y = era_minus_xera, fill = role)) +
+  geom_col() +
+  geom_hline(yintercept = 0, color = "grey40") +
+  coord_flip() +
+  scale_fill_manual(values = c(SP = "#0C2C56", RP = "#005C5C")) +
+  labs(
+    title    = "ERA − xERA: who is the bullpen getting away with it",
+    x        = NULL,
+    y        = "ERA − xERA  (negative = outperforming peripherals)",
+    fill     = NULL
+  )
+```
+
+## Takeaways for the demo
+
+- **renv** pins the library; **Positron** is the IDE; **Coder** gives you
+  the workspace. The notebook above does not care which machine renders it.
+- Every plot here has a one-line analogue in a typical RNA-seq pipeline.
+  Swap the matrix and the y-axis label and you have your own workflow.
+- The fetch script's "live or synthetic" toggle is a generally useful
+  pattern for teaching material that needs to work on a plane.

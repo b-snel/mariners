@@ -1,0 +1,11 @@
+.Rhistory
+.RData
+.Rproj.user/
+.Ruserdata
+.DS_Store
+*.Rcheck/
+data/*.rds
+figures/*.png
+figures/*.pdf
+analysis_files/
+analysis.html
