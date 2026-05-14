@@ -40,16 +40,23 @@ Open the project in **Positron**, run `renv::restore()` once, and every
 package version below is pinned to the lockfile checked into the repo.
 
 ```{r setup}
+# Load all the R packages we need (ggplot2 for charts, dplyr for data wrangling, etc.)
+# "here" makes file paths work regardless of which computer renders this notebook
 source(here::here("R", "00_setup.R"))
 ```
 
 ## 1 · Load the matrix
 
 ```{r fetch}
+# Pull the latest Mariners batting and pitching numbers from the MLB Stats API
+# (or from a saved backup if we're offline — see the note below)
 source(here::here("R", "01_fetch_data.R"))
+
+# Read the saved data files into memory
 batting  <- readRDS(here("data", "batting_2026.rds"))
 pitching <- readRDS(here("data", "pitching_2026.rds"))
 
+# Show the top 8 hitters by plate appearances as a formatted table
 batting |> dplyr::arrange(dplyr::desc(pa)) |> head(8) |> knitr::kable(digits = 3)
 ```
 
@@ -62,6 +69,9 @@ doesn't need a live database connection.
 ## 2 · Heatmap
 
 ```{r heatmap, fig.width = 10, fig.height = 7}
+# Build the heatmap: each column is a player, each row is an offensive stat
+# Colors show how far above or below average each player is for that stat
+# Players with similar hitting profiles get grouped together automatically (the tree on top)
 source(here::here("R", "02_heatmap.R"))
 knitr::include_graphics(here("figures", "02_heatmap.png"))
 ```
@@ -74,6 +84,11 @@ on a cohort — players with similar offensive profiles end up adjacent.
 ## 3 · Volcano plot
 
 ```{r volcano, fig.width = 9, fig.height = 6}
+# Build the volcano plot:
+#   - Left/right position = how much a player is out- or under-performing
+#     what the ball-tracking data says they "should" be hitting
+#   - Up/down position = how confident we are in that gap (more PAs = higher up)
+#   - Dot size = number of plate appearances (bigger dot = larger sample)
 source(here::here("R", "03_volcano.R"))
 knitr::include_graphics(here("figures", "03_volcano.png"))
 ```
@@ -91,6 +106,9 @@ those gates are the season's "differentially expressed" hitters.
 ## 4 · PCA
 
 ```{r pca, fig.width = 9, fig.height = 6.5}
+# Compress all the offensive stats down to two summary axes so players
+# can be plotted on a single chart — nearby players hit similarly
+# The grey arrows show which stats pull players toward each corner of the plot
 source(here::here("R", "04_pca.R"))
 knitr::include_graphics(here("figures", "04_pca.png"))
 ```
@@ -103,14 +121,19 @@ separates power from on-base; PC2 picks up the strikeout/contact axis.
 ## 5 · Pitching staff as a sanity check
 
 ```{r pitching, fig.width = 9, fig.height = 5}
+# ERA is the runs a pitcher has actually allowed; xERA is what the
+# ball-tracking data says they "should" have allowed based on quality of contact
+# A negative bar = pitcher has been better than expected (possibly lucky)
+# A positive bar = pitcher has allowed more runs than his stuff would predict (possibly unlucky)
+
 pitching |>
-  dplyr::arrange(era) |>
-  dplyr::mutate(player = forcats::fct_inorder(player)) |>
+  dplyr::arrange(era) |>                              # sort by actual ERA, best first
+  dplyr::mutate(player = forcats::fct_inorder(player)) |>  # keep that sort order in the chart
   ggplot(aes(x = player, y = era_minus_xera, fill = role)) +
   geom_col() +
-  geom_hline(yintercept = 0, color = "grey40") +
-  coord_flip() +
-  scale_fill_manual(values = c(SP = "#0C2C56", RP = "#005C5C")) +
+  geom_hline(yintercept = 0, color = "grey40") +      # reference line: ERA equals xERA
+  coord_flip() +                                       # horizontal bars are easier to read with names
+  scale_fill_manual(values = c(SP = "#0C2C56", RP = "#005C5C")) +  # Mariners navy for starters, teal for relievers
   labs(
     title    = "ERA − xERA: who is the bullpen getting away with it",
     x        = NULL,

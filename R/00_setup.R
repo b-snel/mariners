@@ -31,7 +31,8 @@ dir.create(here("data"),    showWarnings = FALSE)
 dir.create(here("figures"), showWarnings = FALSE)
 
 # Constants
-MARINERS_TEAM_ID <- 136     # MLB Stats API
+MARINERS_TEAM_ID <- 136     # MLB Stats API team ID (kept for reference)
+MARINERS_ABBR    <- "SEA"   # FanGraphs team abbreviation
 SEASON           <- 2026
 
 # A small palette that reads as "Mariners" without being garish.
