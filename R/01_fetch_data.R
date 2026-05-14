@@ -11,6 +11,27 @@ source(here::here("R", "00_setup.R"))
 
 # ---- Helpers ------------------------------------------------------------
 
+# Fetch primary position for each active roster member via the MLB Stats API.
+# Returns a two-column tibble: player (name) + pos (abbreviation e.g. "CF").
+fetch_positions <- function(team_id, season) {
+  tryCatch({
+    roster <- baseballr::mlb_rosters(
+      team_id     = team_id,
+      season      = season,
+      roster_type = "active"
+    )
+    roster |>
+      dplyr::select(
+        player = person_full_name,
+        pos    = position_abbreviation
+      ) |>
+      dplyr::distinct(player, .keep_all = TRUE)
+  }, error = function(e) {
+    message("  roster fetch failed (", conditionMessage(e), ") — positions will be UNK.")
+    NULL
+  })
+}
+
 try_fetch_batting <- function(season, team_abbr = "SEA") {
   tryCatch({
     df <- baseballr::fg_batter_leaders(
@@ -59,11 +80,13 @@ try_fetch_pitching <- function(season, team_abbr = "SEA") {
 # stats as character strings.  Map them to the tidy schema used everywhere
 # else in the notebook and derive wOBA / xwOBA from available columns.
 
-normalize_batting <- function(df) {
+normalize_batting <- function(df, positions = NULL) {
   # FanGraphs column aliases -> target names used throughout the notebook
+  # NOTE: "Pos" in FanGraphs is a numeric positional-adjustment value (WAR
+  # component), not a position abbreviation — we intentionally skip it and
+  # fall back to "UNK" so downstream annotation code doesn't break.
   aliases <- list(
     player = c("Name", "PlayerName"),
-    pos    = c("Pos", "Position"),
     pa     = c("PA"),
     hr     = c("HR"),
     bb     = c("BB"),
@@ -82,17 +105,32 @@ normalize_batting <- function(df) {
     }
   }
 
+  # FanGraphs does not expose a position-abbreviation column in batter leaders.
+  # Join from the separately-fetched roster if available; fall back to "UNK".
+  if (!is.null(positions) && nrow(positions) > 0) {
+    df <- dplyr::left_join(df, positions, by = "player")
+    if ("pos.y" %in% names(df)) {               # resolve collision if pos already existed
+      df$pos <- dplyr::coalesce(df$pos.y, df$pos.x)
+      df$pos.x <- NULL; df$pos.y <- NULL
+    }
+  }
+  if (!"pos" %in% names(df) || is.numeric(df$pos)) df$pos <- NA_character_
+  df$pos[is.na(df$pos)] <- "UNK"
+
   for (col in c("pa", "hr", "bb", "k", "ba", "obp", "slg", "woba", "xwoba")) {
     if (col %in% names(df)) df[[col]] <- suppressWarnings(as.numeric(df[[col]]))
   }
 
   df <- df[!is.na(df$pa) & df$pa > 10, ]
 
-  # xwOBA may be absent early in the season before Statcast publishes it;
-  # fall back to a small jitter on wOBA so downstream plots still render
-  if (!"xwoba" %in% names(df) || all(is.na(df$xwoba))) {
+  # xwOBA may be absent early in the season before Statcast publishes it,
+  # or have partial NAs; impute any missing values with a small wOBA jitter
+  if (!"xwoba" %in% names(df) || anyNA(df$xwoba)) {
     set.seed(2026)
-    df$xwoba <- round(df$woba * (1 + stats::runif(nrow(df), -0.04, 0.04)), 3)
+    missing <- is.na(df$xwoba)
+    df$xwoba[missing] <- round(
+      df$woba[missing] * (1 + stats::runif(sum(missing), -0.04, 0.04)), 3
+    )
   }
 
   df$diff <- round(df$woba - df$xwoba, 3)
@@ -207,9 +245,12 @@ synth_pitching <- function() {
 
 # ---- Run ----------------------------------------------------------------
 
+message("Fetching 2026 Mariners roster positions ...")
+positions <- fetch_positions(MARINERS_TEAM_ID, SEASON)
+
 message("Fetching 2026 Mariners batting ...")
 batting_raw <- try_fetch_batting(SEASON, MARINERS_ABBR)
-batting     <- if (is.null(batting_raw)) synth_batting() else normalize_batting(batting_raw)
+batting     <- if (is.null(batting_raw)) synth_batting() else normalize_batting(batting_raw, positions)
 
 message("Fetching 2026 Mariners pitching ...")
 pitching_raw <- try_fetch_pitching(SEASON, MARINERS_ABBR)
