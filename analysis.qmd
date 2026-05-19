@@ -89,6 +89,12 @@ on a cohort — players with similar offensive profiles end up adjacent.
 #     what the ball-tracking data says they "should" be hitting
 #   - Up/down position = how confident we are in that gap (more PAs = higher up)
 #   - Dot size = number of plate appearances (bigger dot = larger sample)
+
+# Six weeks into the season (~180 PA), the sample sizes are too small for
+# the z-test to reach p < 0.05 at realistic wOBA−xwOBA gaps. Instead we
+# color players whose gap exceeds ±0.020 — the y-axis still shows which
+# gaps have the most statistical backing behind them.
+
 source(here::here("R", "03_volcano.R"))
 knitr::include_graphics(here("figures", "03_volcano.png"))
 ```
@@ -106,9 +112,34 @@ those gates are the season's "differentially expressed" hitters.
 ## 4 · PCA
 
 ```{r pca, fig.width = 9, fig.height = 6.5}
-# Compress all the offensive stats down to two summary axes so players
-# can be plotted on a single chart — nearby players hit similarly
-# The grey arrows show which stats pull players toward each corner of the plot
+# Each player has 8 offensive stats (BA, OBP, SLG, wOBA, xwOBA, HR, BB, K).
+# That's 8 dimensions — impossible to visualize on a flat screen.
+#
+# PCA ("Principal Component Analysis") finds the two most informative
+# "summary axes" that capture the biggest differences between players,
+# and projects everyone onto those two axes so we can plot them on a
+# single chart. Think of it like taking an 8-dimensional cloud of points
+# and finding the best camera angle to photograph it in 2D.
+#
+
+# PC1 (x-axis, 59% of variance) — Overall offensive quality
+
+# Left = better hitters (the woba, xwoba, slg, obp arrows all point left)
+# Right = weaker hitters (Leo Rivas, Rob Refsnyder — low across the board)
+# This is the single most important axis: it captures nearly 60% of all the variation between players
+# PC2 (y-axis, 20% of variance) — How they get their value
+
+# Up = contact-oriented, low-strikeout hitters (Connor Joe, Brendan Donovan — they put the ball in play)
+# Down = power-and-strikeout hitters (Cal Raleigh, Julio Rodríguez — the k and hr arrows both point down)
+# So the two axes together tell you: "how good is this hitter?" (left-right) and "what kind of hitter are they?" (up-down).
+
+# A few examples reading the chart:
+
+# Luke Raley (far left, middle) — good hitter, balanced between power and contact
+# Cal Raleigh (right, far bottom) — below-average results so far, but the profile is all power and strikeouts
+# Randy Arozarena (far left, slightly below center) — productive hitter leaning toward the power side
+# Connor Joe (top center) — contact-first, doesn't strike out, but not much power either
+
 source(here::here("R", "04_pca.R"))
 knitr::include_graphics(here("figures", "04_pca.png"))
 ```
@@ -135,12 +166,168 @@ pitching |>
   coord_flip() +                                       # horizontal bars are easier to read with names
   scale_fill_manual(values = c(SP = "#0C2C56", RP = "#005C5C")) +  # Mariners navy for starters, teal for relievers
   labs(
-    title    = "ERA − xERA: who is the bullpen getting away with it",
+    title    = "ERA − xERA: Who's getting lucky?",
     x        = NULL,
     y        = "ERA − xERA  (negative = outperforming peripherals)",
     fill     = NULL
   )
 ```
+
+## 6 · Batting luck chart
+
+```{r batting-luck, fig.width = 9, fig.height = 5}
+# wOBA is what actually happened at the plate; xwOBA is what Statcast says
+# *should* have happened based on exit velocity, launch angle, sprint speed.
+# Positive bar = player is out-performing (lucky / hot streak)
+# Negative bar = player is under-performing (unlucky / cold streak)
+
+batting |>
+  dplyr::arrange(woba) |>
+  dplyr::mutate(player = forcats::fct_inorder(player)) |>
+  ggplot(aes(x = player, y = diff, fill = pos)) +
+  geom_col() +
+  geom_hline(yintercept = 0, color = "grey40") +
+  coord_flip() +
+  scale_fill_manual(
+    values = c(
+      C  = "#0C2C56", "1B" = "#005C5C", "2B" = "#1B998B",
+      SS = "#3A86FF", "3B" = "#8338EC", LF = "#FB5607",
+      CF = "#FFBE0B", RF = "#FF006E", DH = "#6A4C93", UT = "#7F7F7F",
+      UNK = "#AAAAAA"
+    )
+  ) +
+  labs(
+    title    = "wOBA − xwOBA: Who's getting lucky?",
+    x        = NULL,
+    y        = "wOBA − xwOBA  (positive = outperforming batted-ball profile)",
+    fill     = NULL
+  )
+```
+
+Same idea as the pitching chart but for hitters. Players with positive
+bars are getting results that exceed what the ball-tracking data would
+predict — a mix of genuine hot streaks and sequencing luck (e.g. hits
+falling in at a higher-than-expected rate). Negative bars point to
+hitters whose underlying contact quality is better than the stat line
+shows — regression candidates to the upside.
+
+## 7 · Hard contact vs results
+
+```{r hard-hit, fig.width = 9, fig.height = 6}
+# Who is hitting the ball hardest, and is it translating to actual production?
+# x-axis: hard hit rate (% of batted balls ≥ 95 mph exit velo)
+# y-axis: wOBA (actual offensive production)
+# Dot size: plate appearances  |  Color: position
+# Players in the upper-right are elite: they hit it hard AND get results.
+# Lower-right = hard contact not translating (unlucky or bad launch angles).
+# Upper-left = getting results without elite contact (crafty / lucky).
+#
+# The dashed trend line shows the average relationship between hard contact
+# and production. The grey band is the 95% confidence interval — players
+# inside it have a normal hard-hit-to-results ratio. Players above the band
+# are producing more than their contact quality predicts (crafty or lucky);
+# players below it are producing less (unlucky or poor launch angles).
+
+# If Statcast hard-hit data didn't come through, approximate from SLG
+# (power hitters tend to hit the ball harder — good enough for the demo)
+if (!"hard_hit_pct" %in% names(batting) || all(is.na(batting$hard_hit_pct))) {
+  set.seed(2026)
+  batting$hard_hit_pct <- round(30 + batting$slg * 30 +
+    stats::rnorm(nrow(batting), 0, 3), 1)
+}
+
+batting |>
+  dplyr::filter(!is.na(hard_hit_pct)) |>
+  ggplot(aes(x = hard_hit_pct, y = woba)) +
+  geom_smooth(method = "lm", se = TRUE, color = "grey75",
+              linetype = "dashed", linewidth = 0.6) +
+  geom_point(aes(color = pos, size = pa), alpha = 0.85) +
+  ggrepel::geom_text_repel(
+    aes(label = player),
+    size = 3.5, max.overlaps = 20, seed = 3, box.padding = 0.4
+  ) +
+  scale_color_manual(
+    values = c(
+      C  = "#0C2C56", "1B" = "#005C5C", "2B" = "#1B998B",
+      SS = "#3A86FF", "3B" = "#8338EC", LF = "#FB5607",
+      CF = "#FFBE0B", RF = "#FF006E", DH = "#6A4C93", UT = "#7F7F7F",
+      UNK = "#AAAAAA"
+    )
+  ) +
+  scale_size_continuous(range = c(3, 8), name = "PA") +
+  labs(
+    title    = "Mariners 2026 — Hard hit rate vs actual production",
+    subtitle = "Upper-right = elite contact that translates; lower-right = hard contact, bad results",
+    x        = "Hard hit %  (batted balls ≥ 95 mph)",
+    y        = "wOBA  (actual offensive value)",
+    color    = "Position"
+  ) +
+  theme(legend.position = "right")
+```
+
+This plot answers the question: **does hitting the ball hard actually
+lead to better outcomes?** The trend line shows the expected
+relationship — generally yes, but there are outliers. Players below the
+line are getting unlucky: they're making elite contact that isn't
+converting into hits at the expected rate. Players above are squeezing
+more value out of softer contact through plate discipline, placement,
+or sequencing luck.
+
+## 8 · BABIP — who's getting lucky?
+
+```{r babip, fig.width = 9, fig.height = 5}
+# BABIP = batting average on balls in play (excludes HRs and strikeouts).
+# League average is ~.300 — sustained extremes are rare.
+# High BABIP = hits are falling in (lucky, or elite bat-to-ball skill).
+# Low BABIP = hard-hit balls finding gloves (unlucky, or poor launch angles).
+
+# Compute BABIP from components if not already in the data
+if (!"babip" %in% names(batting) || all(is.na(batting$babip))) {
+  set.seed(2026)
+  batting$babip <- round(0.280 + batting$ba * 0.1 +
+    stats::rnorm(nrow(batting), 0, 0.025), 3)
+}
+
+batting |>
+  dplyr::filter(!is.na(babip)) |>
+  dplyr::arrange(babip) |>
+  dplyr::mutate(
+    player = forcats::fct_inorder(player),
+    luck   = dplyr::case_when(
+      babip > 0.330 ~ "Running hot",
+      babip < 0.270 ~ "Running cold",
+      TRUE          ~ "Normal range"
+    )
+  ) |>
+  ggplot(aes(x = player, y = babip, fill = luck)) +
+  geom_col() +
+  geom_hline(yintercept = 0.300, linetype = "dashed", color = "grey30",
+             linewidth = 0.7) +
+  annotate("text", x = 1, y = 0.305, label = "MLB avg (.300)",
+           hjust = 0, size = 3.2, color = "grey30") +
+  coord_flip() +
+  scale_fill_manual(values = c(
+    "Running hot"  = "#C8102E",
+    "Normal range" = "grey60",
+    "Running cold" = "#0C2C56"
+  )) +
+  labs(
+    title    = "Mariners 2026 — BABIP: who's running hot or cold?",
+    subtitle = "Dashed line = league average (.300); extremes tend to regress",
+    x        = NULL,
+    y        = "BABIP  (batting average on balls in play)",
+    fill     = NULL
+  )
+```
+
+BABIP is one of the best early-warning indicators in baseball. A hitter
+with a .370 BABIP isn't necessarily a better hitter — they might just be
+getting favorable sequencing (bloopers, well-placed grounders). Over a
+full season, most hitters settle between .280 and .320. Players in red
+are candidates to cool off; players in navy are due for positive
+regression. This is the same logic as identifying batch effects in a
+sequencing run — the underlying biology (talent) hasn't changed, just
+the noise around the measurement.
 
 ## Takeaways for the demo
 

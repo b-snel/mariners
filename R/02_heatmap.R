@@ -44,19 +44,23 @@ if (has_positions) {
   annot_colors <- NA
 }
 
-png(here("figures", "02_heatmap.png"),
-    width = 1600, height = 1100, res = 180)
-pheatmap::pheatmap(
-  mat,
-  color             = viridis::magma(100),
-  annotation_col    = annot_col,
-  annotation_colors = if (identical(annot_colors, NA)) NA else annot_colors,
-  cluster_rows      = TRUE,
-  cluster_cols      = TRUE,
-  fontsize          = 11,
-  main              = "Mariners 2026 — Z-scored batting features (player × stat)",
-  border_color      = NA
-)
-dev.off()
+invisible({
+  png(here("figures", "02_heatmap.png"),
+      width = 1600, height = 1100, res = 180)
+  tryCatch(
+    pheatmap::pheatmap(
+      mat,
+      color             = viridis::magma(100),
+      annotation_col    = annot_col,
+      annotation_colors = if (identical(annot_colors, NA)) NA else annot_colors,
+      cluster_rows      = TRUE,
+      cluster_cols      = TRUE,
+      fontsize          = 11,
+      main              = "Mariners 2026 — Z-scored batting features (player × stat)",
+      border_color      = NA
+    ),
+    finally = dev.off()
+  )
+})
 
 message("Wrote figures/02_heatmap.png")

@@ -28,10 +28,13 @@ volcano_df <- batting |>
     z        = effect / se,
     p_value  = 2 * pnorm(-abs(z)),
     neg_log10_p = -log10(p_value),
+    # Color by effect size alone — six weeks of PAs (~180) can't reliably
+    # reach p < 0.05 on a z-test for realistic wOBA gaps. The y-axis still
+    # shows significance so the viewer can see who has the most evidence.
     direction = dplyr::case_when(
-      p_value < 0.05 & effect >  0 ~ "Over-performing",
-      p_value < 0.05 & effect <  0 ~ "Under-performing",
-      TRUE                         ~ "n.s."
+      effect >  0.020 ~ "Over-performing",
+      effect < -0.020 ~ "Under-performing",
+      TRUE            ~ "n.s."
     )
   )
 
@@ -45,14 +48,14 @@ p <- ggplot(volcano_df, aes(x = effect, y = neg_log10_p, color = direction)) +
     size = 3.6, max.overlaps = 20, seed = 1, box.padding = 0.4
   ) +
   scale_color_manual(values = c(
-    "Over-performing"  = "#0C2C56",
-    "Under-performing" = "#C8102E",
+    "Over-performing"  = "#C8102E",
+    "Under-performing" = "#0C2C56",
     "n.s."             = "grey70"
   )) +
   scale_size_continuous(range = c(2, 7), name = "PA") +
   labs(
     title    = "Mariners 2026 — wOBA vs xwOBA volcano",
-    subtitle = "Effect size = observed − expected; significance from PA-weighted z-test",
+    subtitle = "Colored at ±0.020 effect size; y-axis reflects sample-size confidence",
     x        = "wOBA − xwOBA",
     y        = expression(-log[10]~"(p)"),
     color    = NULL

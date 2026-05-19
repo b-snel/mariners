@@ -34,6 +34,7 @@ fetch_positions <- function(team_id, season) {
 
 try_fetch_batting <- function(season, team_abbr = "SEA") {
   tryCatch({
+    # Dashboard stats (type=8): PA, AVG, OBP, SLG, wOBA, HR, BB, SO, etc.
     df <- baseballr::fg_batter_leaders(
       startseason = as.character(season),
       endseason   = as.character(season),
@@ -46,9 +47,74 @@ try_fetch_batting <- function(season, team_abbr = "SEA") {
     if (is.null(team_col)) stop(paste("no team column found; available:", paste(names(df), collapse = ", ")))
     df <- df[toupper(df[[team_col]]) == toupper(team_abbr), ]
     if (nrow(df) == 0) stop(paste("no rows for", team_abbr, "— unique values in", team_col, ":", paste(unique(df[[team_col]])[1:5], collapse = ", ")))
+
+    # Statcast stats (type=24): xwOBA, xBA, xSLG, etc.
+    # Fetched separately because the dashboard preset doesn't include Statcast.
+    statcast <- try_fetch_statcast(season)
+    if (!is.null(statcast)) {
+      name_col <- Find(function(x) x %in% names(statcast), c("Name", "PlayerName"))
+      xwoba_col <- Find(function(x) x %in% names(statcast), c("xwOBA", "xwoba"))
+      if (!is.null(name_col) && !is.null(xwoba_col)) {
+        # Build a Statcast join table with xwOBA + hard-hit metrics
+        sc <- data.frame(
+          player_sc = statcast[[name_col]],
+          xwoba_sc  = suppressWarnings(as.numeric(statcast[[xwoba_col]])),
+          stringsAsFactors = FALSE
+        )
+        # Hard-hit metrics: try common FanGraphs Statcast column names
+        for (metric in list(
+          list(target = "hard_hit_pct", candidates = c("HardHit%", "Hard%", "HardHit")),
+          list(target = "barrel_pct",   candidates = c("Barrel%", "Barrel")),
+          list(target = "avg_ev",       candidates = c("EV", "maxEV", "AvgEV", "avg_hit_speed"))
+        )) {
+          src <- Find(function(x) x %in% names(statcast), metric$candidates)
+          if (!is.null(src)) {
+            sc[[metric$target]] <- suppressWarnings(as.numeric(statcast[[src]]))
+          }
+        }
+
+        # Match by the same name column used in the dashboard data
+        dash_name_col <- Find(function(x) x %in% names(df), c("Name", "PlayerName"))
+        if (!is.null(dash_name_col)) {
+          df <- dplyr::left_join(df, sc,
+            by = stats::setNames("player_sc", dash_name_col))
+          # Prefer Statcast xwOBA over any dashboard value
+          if ("xwoba_sc" %in% names(df)) {
+            xwoba_existing <- Find(function(x) x %in% names(df), c("xwOBA", "xwoba"))
+            if (!is.null(xwoba_existing)) {
+              df[[xwoba_existing]] <- dplyr::coalesce(df$xwoba_sc, df[[xwoba_existing]])
+            } else {
+              df$xwOBA <- df$xwoba_sc
+            }
+            df$xwoba_sc <- NULL
+          }
+        }
+        message("  joined Statcast data for ", sum(!is.na(sc$xwoba_sc)), " players.")
+      }
+    }
+
     df
   }, error = function(e) {
     message("  baseballr fetch failed (", conditionMessage(e), ") — using synthetic data.")
+    NULL
+  })
+}
+
+# Fetch Statcast data (type=24) from FanGraphs for xwOBA.
+try_fetch_statcast <- function(season) {
+  tryCatch({
+    df <- baseballr::fg_batter_leaders(
+      startseason = as.character(season),
+      endseason   = as.character(season),
+      lg          = "all",
+      qual        = "30",
+      ind         = "0",
+      type        = "24"
+    )
+    if (is.null(df) || nrow(df) == 0) stop("empty Statcast response")
+    df
+  }, error = function(e) {
+    message("  Statcast fetch failed (", conditionMessage(e), ") — xwOBA will be approximate.")
     NULL
   })
 }
@@ -95,7 +161,8 @@ normalize_batting <- function(df, positions = NULL) {
     obp    = c("OBP"),
     slg    = c("SLG"),
     woba   = c("wOBA"),
-    xwoba  = c("xwOBA", "xwoba")
+    xwoba  = c("xwOBA", "xwoba"),
+    babip  = c("BABIP")
   )
 
   for (target in names(aliases)) {
@@ -117,7 +184,7 @@ normalize_batting <- function(df, positions = NULL) {
   if (!"pos" %in% names(df) || is.numeric(df$pos)) df$pos <- NA_character_
   df$pos[is.na(df$pos)] <- "UNK"
 
-  for (col in c("pa", "hr", "bb", "k", "ba", "obp", "slg", "woba", "xwoba")) {
+  for (col in c("pa", "hr", "bb", "k", "ba", "obp", "slg", "woba", "xwoba", "babip")) {
     if (col %in% names(df)) df[[col]] <- suppressWarnings(as.numeric(df[[col]]))
   }
 
@@ -135,8 +202,14 @@ normalize_batting <- function(df, positions = NULL) {
 
   df$diff <- round(df$woba - df$xwoba, 3)
 
+  # Coerce Statcast hard-hit metrics to numeric if they came through
+  for (col in c("hard_hit_pct", "barrel_pct", "avg_ev")) {
+    if (col %in% names(df)) df[[col]] <- suppressWarnings(as.numeric(df[[col]]))
+  }
+
   keep <- intersect(
-    c("player", "pos", "pa", "hr", "bb", "k", "ba", "obp", "slg", "woba", "xwoba", "diff"),
+    c("player", "pos", "pa", "hr", "bb", "k", "ba", "obp", "slg",
+      "woba", "xwoba", "diff", "babip", "hard_hit_pct", "barrel_pct", "avg_ev"),
     names(df)
   )
   df[, keep, drop = FALSE]
@@ -215,8 +288,12 @@ synth_batting <- function() {
     "Tyler Locklear",     "1B",   64,   3,   5,  21,  0.214,  0.281,  0.411,  0.331
   )
   players |> dplyr::mutate(
-    woba   = round((0.69 * bb + 0.89 * (ba * pa) + 0.5 * hr) / pa, 3),
-    diff   = round(woba - xwoba, 3)
+    woba         = round((0.69 * bb + 0.89 * (ba * pa) + 0.5 * hr) / pa, 3),
+    diff         = round(woba - xwoba, 3),
+    babip        = round(0.280 + ba * 0.1 + stats::rnorm(dplyr::n(), 0, 0.025), 3),
+    hard_hit_pct = round(30 + slg * 30 + stats::rnorm(dplyr::n(), 0, 3), 1),
+    barrel_pct   = round(3 + hr / pa * 200 + stats::rnorm(dplyr::n(), 0, 1.5), 1),
+    avg_ev       = round(85 + slg * 10 + stats::rnorm(dplyr::n(), 0, 1), 1)
   )
 }
 
