@@ -1,0 +1,151 @@
+---
+title: "WAR Trends"
+subtitle: "How each hitter and pitcher has piled up WAR — zoom to any window"
+date: today
+page-layout: full
+---
+
+```{r setup, include=FALSE}
+source(here::here("R", "00_setup.R"))
+
+# Build the daily WAR history if it's missing (standalone render). In CI the
+# leaderboard fetch + this builder run before the render.
+if (!file.exists(here("data", "war_history.rds"))) {
+  source(here::here("R", "06_war_history.R"))
+}
+
+history    <- readRDS(here("data", "war_history.rds"))
+war_source <- tryCatch(readLines(here("data", "war_source.txt"), n = 1),
+                       error = function(e) "unknown")
+
+# Hand the series to Observable JS. Dates go over as ISO strings (OJS parses
+# them back to Date objects), which survives the JSON round-trip cleanly.
+if (nrow(history) > 0) history$date <- format(as.Date(history$date), "%Y-%m-%d")
+ojs_define(war_raw = history)
+```
+
+```{r notice, echo=FALSE, results='asis'}
+if (identical(war_source, "synthetic")) {
+  cat("> ⚠️ **Demo data:** the live feed was unavailable at render time, so these",
+      "trends are from the synthetic fallback — illustrative, not real results.\n")
+} else if (identical(war_source, "unavailable")) {
+  cat("> ℹ️ **Warming up:** game-by-game WAR history wasn't available from the feed",
+      "at render time. The chart will populate once game logs are reachable.\n")
+}
+```
+
+**WAR** (wins above replacement) rolls a player's entire season — offense, defense,
+baserunning, or run prevention — into one number measuring how many wins they've added
+versus a freely-available replacement. It only accumulates, so each line below climbs
+over the year; a **steep stretch is a hot streak**, a **flat stretch is a cold one**.
+
+Use the selector to zoom the timeline to the last few days or the whole season. By
+default the chart shows the **biggest movers** in the chosen window — the players who
+gained (or lost) the most WAR over that span — but you can switch to everyone.
+
+```{ojs}
+//| echo: false
+data = transpose(war_raw)
+  .map(d => ({
+    player: d.player,
+    type: d.type,
+    date: new Date(d.date + "T00:00:00Z"),
+    war: +d.war
+  }))
+  .filter(d => !isNaN(d.date) && isFinite(d.war))
+```
+
+```{ojs}
+//| echo: false
+viewof days = Inputs.select(
+  new Map([
+    ["Last 3 days", 3],
+    ["Last 7 days", 7],
+    ["Last 14 days", 14],
+    ["Last 30 days", 30],
+    ["Last 60 days", 60],
+    ["Rest of season", 100000]
+  ]),
+  { value: 30, label: "Look back" }
+)
+```
+
+```{ojs}
+//| echo: false
+viewof showAll = Inputs.toggle({ label: "Show all players", value: false })
+```
+
+```{ojs}
+//| echo: false
+maxDate = data.length ? d3.max(data, d => d.date) : new Date()
+cutoff = new Date(maxDate.getTime() - days * 86400000)
+windowed = data.filter(d => d.date >= cutoff)
+```
+
+```{ojs}
+//| echo: false
+// Rank players by how much WAR they gained across the visible window.
+movers = {
+  const byPlayer = d3.group(windowed, d => d.player);
+  const deltas = Array.from(byPlayer, ([player, rows]) => {
+    const sorted = rows.slice().sort((a, b) => a.date - b.date);
+    return { player, delta: sorted[sorted.length - 1].war - sorted[0].war };
+  });
+  return deltas.sort((a, b) => d3.descending(Math.abs(a.delta), Math.abs(b.delta)));
+}
+
+shown = showAll
+  ? new Set(data.map(d => d.player))
+  : new Set(movers.slice(0, 8).map(d => d.player))
+
+plotData = windowed.filter(d => shown.has(d.player))
+```
+
+```{ojs}
+//| echo: false
+html`${data.length === 0
+  ? `<div class="trends-empty">Trend data is still warming up — check back after the next refresh.</div>`
+  : ""}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: Math.min(width, 960),
+  height: 540,
+  marginRight: 130,
+  x: { label: "Date", type: "utc" },
+  y: { label: "Cumulative WAR ↑", grid: true },
+  color: { legend: !showAll },
+  marks: [
+    Plot.ruleY([0], { stroke: "#999" }),
+    Plot.line(plotData, {
+      x: "date", y: "war", stroke: "player",
+      strokeWidth: showAll ? 1 : 2.2,
+      strokeOpacity: showAll ? 0.55 : 1,
+      curve: "monotone-x",
+      tip: true
+    }),
+    Plot.text(plotData, Plot.selectLast({
+      x: "date", y: "war", z: "player",
+      text: "player", fill: "player",
+      textAnchor: "start", dx: 6, fontWeight: 600,
+      fontSize: showAll ? 9 : 11
+    }))
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+md`*${showAll
+  ? `Showing all ${shown.size} players`
+  : `Showing the ${Math.min(8, movers.length)} biggest WAR movers`} over the selected window. Each label sits at the player's latest value.*`
+```
+
+---
+
+*WAR here is season-cumulative: picking a shorter window zooms the x-axis but keeps
+each line's running total, so you read recent form as the **slope** of the line over
+that span. Live trends are reconstructed from FanGraphs game logs and refresh with the
+rest of the site the morning after each game.*

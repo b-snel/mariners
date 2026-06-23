@@ -6,6 +6,7 @@ project:
   render:
     - index.qmd
     - analysis.qmd
+    - trends.qmd
 
 website:
   title: "Mariners 2026"
@@ -23,6 +24,8 @@ website:
         text: Home
       - href: /analysis
         text: Full analysis
+      - href: /trends
+        text: WAR trends
     right:
       - icon: github
         href: https://github.com/b-snel/mariners

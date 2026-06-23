@@ -109,3 +109,20 @@ table {
     columns: 1;
   }
 }
+
+// WAR trends page — Observable JS controls + empty state.
+.trends-empty {
+  background: $cream;
+  border: 1px dashed $silver;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  color: $teal;
+  font-weight: 600;
+  margin: 1rem 0;
+}
+
+// Give the OJS input widgets (the day selector + toggle) a little room.
+.cell-output-display form {
+  margin: 0.4rem 0;
+}

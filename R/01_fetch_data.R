@@ -165,7 +165,9 @@ normalize_batting <- function(df, positions = NULL) {
     slg    = c("SLG"),
     woba   = c("wOBA"),
     xwoba  = c("xwOBA", "xwoba"),
-    babip  = c("BABIP")
+    babip  = c("BABIP"),
+    war    = c("WAR"),
+    fg_id  = c("playerid", "playerId", "PlayerId", "IDfg", "playerids")
   )
 
   for (target in names(aliases)) {
@@ -187,7 +189,7 @@ normalize_batting <- function(df, positions = NULL) {
   if (!"pos" %in% names(df) || is.numeric(df$pos)) df$pos <- NA_character_
   df$pos[is.na(df$pos)] <- "UNK"
 
-  for (col in c("pa", "hr", "bb", "k", "ba", "obp", "slg", "woba", "xwoba", "babip")) {
+  for (col in c("pa", "hr", "bb", "k", "ba", "obp", "slg", "woba", "xwoba", "babip", "war")) {
     if (col %in% names(df)) df[[col]] <- suppressWarnings(as.numeric(df[[col]]))
   }
 
@@ -211,9 +213,9 @@ normalize_batting <- function(df, positions = NULL) {
   }
 
   keep <- intersect(
-    c("player", "pos", "mlbam_id", "pa", "hr", "bb", "k", "ba", "obp", "slg",
-      "woba", "xwoba", "diff", "babip", "hard_hit_pct", "barrel_pct", "avg_ev",
-      "avg_la"),
+    c("player", "pos", "mlbam_id", "fg_id", "pa", "hr", "bb", "k", "ba", "obp",
+      "slg", "woba", "xwoba", "diff", "babip", "hard_hit_pct", "barrel_pct",
+      "avg_ev", "avg_la", "war"),
     names(df)
   )
   df[, keep, drop = FALSE]
@@ -228,7 +230,9 @@ normalize_pitching <- function(df) {
     hr     = c("HR"),
     era    = c("ERA"),
     fip    = c("FIP"),
-    xera   = c("xERA", "xFIP")
+    xera   = c("xERA", "xFIP"),
+    war    = c("WAR"),
+    fg_id  = c("playerid", "playerId", "PlayerId", "IDfg", "playerids")
   )
 
   for (target in names(aliases)) {
@@ -238,7 +242,7 @@ normalize_pitching <- function(df) {
     }
   }
 
-  for (col in c("ip", "k", "bb", "hr", "era", "fip", "xera")) {
+  for (col in c("ip", "k", "bb", "hr", "era", "fip", "xera", "war")) {
     if (col %in% names(df)) df[[col]] <- suppressWarnings(as.numeric(df[[col]]))
   }
 
@@ -262,8 +266,8 @@ normalize_pitching <- function(df) {
   df$bb_per_9       <- round(df$bb / df$ip * 9, 2)
 
   keep <- intersect(
-    c("player", "role", "ip", "k", "bb", "hr", "era", "fip", "xera",
-      "era_minus_xera", "k_per_9", "bb_per_9"),
+    c("player", "role", "fg_id", "ip", "k", "bb", "hr", "era", "fip", "xera",
+      "era_minus_xera", "k_per_9", "bb_per_9", "war"),
     names(df)
   )
   df[, keep, drop = FALSE]
@@ -299,7 +303,10 @@ synth_batting <- function() {
     barrel_pct   = round(3 + hr / pa * 200 + stats::rnorm(dplyr::n(), 0, 1.5), 1),
     avg_ev       = round(85 + slg * 10 + stats::rnorm(dplyr::n(), 0, 1), 1),
     # Average launch angle: fly-ball/power hitters tip higher; ~9–22° range.
-    avg_la       = round(9 + hr / pa * 70 + stats::rnorm(dplyr::n(), 0, 2), 1)
+    avg_la       = round(9 + hr / pa * 70 + stats::rnorm(dplyr::n(), 0, 2), 1),
+    # Rough season WAR endpoint (synthetic) — scales with wOBA above average
+    # and playing time; the trends page distributes this across the season.
+    war          = round(pmax((woba - 0.300) * pa / 10, -0.4), 1)
   )
 }
 
@@ -322,7 +329,10 @@ synth_pitching <- function() {
   ) |> dplyr::mutate(
     era_minus_xera = round(era - xera, 3),
     k_per_9 = round(k / ip * 9, 2),
-    bb_per_9 = round(bb / ip * 9, 2)
+    bb_per_9 = round(bb / ip * 9, 2),
+    # Rough season WAR endpoint (synthetic) — better-than-average ERA over more
+    # innings earns more; the trends page distributes this across the season.
+    war     = round((3.90 - era) * ip / 45, 1)
   )
 }
 
