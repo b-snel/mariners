@@ -1,0 +1,116 @@
+---
+title: "Seattle Mariners 2026"
+subtitle: "Stats, refreshed the morning after every game"
+date: today
+page-layout: full
+code-fold: true
+---
+
+```{r setup, include=FALSE}
+source(here::here("R", "00_setup.R"))
+
+# In CI the data is fetched once before the render. When this page is rendered
+# standalone (e.g. in Positron) the .rds files may not exist yet — fetch then.
+if (!file.exists(here("data", "batting_2026.rds"))) {
+  source(here::here("R", "01_fetch_data.R"))
+}
+
+batting  <- readRDS(here("data", "batting_2026.rds"))
+pitching <- readRDS(here("data", "pitching_2026.rds"))
+
+refreshed <- format(Sys.time(), tz = "America/Los_Angeles",
+                    format = "%B %e, %Y at %l:%M %p %Z")
+
+# Note when the underlying numbers came from the synthetic fallback rather than
+# the live feed, so the page is never silently wrong.
+src <- tryCatch(readLines(here("data", "data_source.txt"), n = 1),
+                error = function(e) "unknown")
+```
+
+::: {.refreshed-badge}
+Last refreshed: `r refreshed`
+:::
+
+```{r live-warning, echo=FALSE, results='asis'}
+if (!identical(src, "live")) {
+  cat("> ⚠️ **Heads up:** these numbers are from the synthetic fallback — the live",
+      "FanGraphs / MLB Stats API feed was unavailable at render time.\n")
+}
+```
+
+This site treats a baseball season like a bioinformatics experiment: players are
+*samples*, their offensive stats are *features*, and we look for the hitters and
+pitchers behaving differently from the rest. The numbers come from FanGraphs and
+the MLB Stats API and are re-rendered automatically the morning after each
+Mariners game.
+
+[**Read the full differential analysis →**](analysis.qmd)
+
+## Season at a glance
+
+The biggest gaps between what hitters have actually produced (**wOBA**) and what
+their batted-ball quality says they *should* have produced (**xwOBA**). Positive =
+out-performing the profile (regression candidates down); negative = under-performing
+(due for positive regression).
+
+```{r glance}
+glance <- batting |>
+  dplyr::transmute(
+    Player = player,
+    Pos    = pos,
+    PA     = pa,
+    wOBA   = round(woba, 3),
+    xwOBA  = round(xwoba, 3),
+    Diff   = round(woba - xwoba, 3)
+  ) |>
+  dplyr::arrange(dplyr::desc(Diff))
+
+over  <- utils::head(glance, 5)
+under <- glance |> utils::tail(5) |> dplyr::arrange(Diff)
+```
+
+::: {layout-ncol="2"}
+
+::: {}
+**Running hot — over-performing**
+
+```{r over}
+knitr::kable(over, row.names = FALSE)
+```
+:::
+
+::: {}
+**Running cold — under-performing**
+
+```{r under}
+knitr::kable(under, row.names = FALSE)
+```
+:::
+
+:::
+
+## Pitching: who's been lucky?
+
+ERA minus xERA — negative means a pitcher has allowed fewer runs than his
+peripherals predict.
+
+```{r pitching-glance}
+pitching |>
+  dplyr::transmute(
+    Player = player,
+    Role   = role,
+    IP     = ip,
+    ERA    = round(era, 2),
+    xERA   = round(xera, 2),
+    `ERA − xERA` = round(era_minus_xera, 2)
+  ) |>
+  dplyr::arrange(`ERA − xERA`) |>
+  knitr::kable(row.names = FALSE)
+```
+
+---
+
+*How this updates: a scheduled GitHub Actions workflow checks each morning whether
+the Mariners finished a game the night before. If so, it re-fetches the stats,
+re-renders this site, and deploys it to Vercel. Off-days are skipped, and the
+synthetic fallback is never published.*

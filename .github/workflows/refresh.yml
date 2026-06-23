@@ -1,0 +1,153 @@
+name: Refresh Mariners site
+
+# Re-renders the Quarto site with fresh stats and deploys it to Vercel.
+# Vercel cannot run R/Quarto, so all rendering happens here and Vercel only
+# serves the static output in _site/.
+
+on:
+  schedule:
+    # Times are UTC. FanGraphs season leaderboards finish loading ~5–6am ET,
+    # so we render after that. Offset minute :17 avoids top-of-hour cron delays.
+    - cron: "17 13 * * *"   # ~06:17 PT — primary morning refresh
+    - cron: "17 15 * * *"   # ~08:17 PT — insurance against delayed/dropped runs
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Render and deploy even if no game finished / data is synthetic"
+        type: boolean
+        default: false
+
+# Never let two runs deploy out of order.
+concurrency:
+  group: refresh-site
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04   # must be noble to match renv.lock's PPM binaries
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      # ---- Guard 1: did the Mariners finish a game in the last day? ----------
+      # PT-evening games land on the next UTC calendar day, so query both
+      # yesterday and today (UTC). Off-days have nothing new to publish.
+      - name: Game guard
+        id: gameguard
+        run: |
+          set -euo pipefail
+          if [ "${{ inputs.force }}" = "true" ]; then
+            echo "force=true → skipping game check"
+            echo "had_game=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          TODAY=$(date -u +%F)
+          YDAY=$(date -u -d "yesterday" +%F)
+          URL="https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId=136&startDate=${YDAY}&endDate=${TODAY}"
+          echo "Querying: $URL"
+          JSON=$(curl -fsS "$URL")
+          FINALS=$(printf '%s' "$JSON" | jq '[.dates[]?.games[]? | select(.status.abstractGameState=="Final")] | length')
+          echo "Final Mariners games in window (${YDAY}..${TODAY} UTC): ${FINALS}"
+          if [ "${FINALS:-0}" -gt 0 ]; then
+            echo "had_game=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "had_game=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No finished Mariners game in the window — skipping render & deploy."
+          fi
+
+      # ---- Toolchain (only when there's work to do) --------------------------
+      - name: System libraries for R packages (ragg/svglite/curl/xml2)
+        if: steps.gameguard.outputs.had_game == 'true'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            libcurl4-openssl-dev libssl-dev libxml2-dev \
+            libfontconfig1-dev libfreetype6-dev libpng-dev \
+            libtiff5-dev libjpeg-dev libharfbuzz-dev libfribidi-dev
+
+      - name: Set up Quarto
+        if: steps.gameguard.outputs.had_game == 'true'
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Set up R
+        if: steps.gameguard.outputs.had_game == 'true'
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "4.5.2"
+          use-public-rspm: true
+
+      - name: Restore renv library (cached)
+        if: steps.gameguard.outputs.had_game == 'true'
+        uses: r-lib/actions/setup-renv@v2
+
+      - name: Set up Node (for Vercel CLI)
+        if: steps.gameguard.outputs.had_game == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # ---- Fetch data once, then render --------------------------------------
+      - name: Fetch latest stats
+        if: steps.gameguard.outputs.had_game == 'true'
+        run: Rscript -e 'source("R/01_fetch_data.R")'
+
+      - name: Guard 2 — was the data live (not synthetic)?
+        id: dataguard
+        if: steps.gameguard.outputs.had_game == 'true'
+        run: |
+          set -euo pipefail
+          SRC=$(head -n1 data/data_source.txt 2>/dev/null || echo "unknown")
+          echo "Data source: ${SRC}"
+          if [ "${SRC}" = "live" ]; then
+            echo "had_live_data=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "had_live_data=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Live fetch fell back to synthetic data — deploy will be skipped."
+          fi
+
+      - name: Render site
+        if: steps.gameguard.outputs.had_game == 'true'
+        run: quarto render
+
+      - name: Upload rendered site artifact
+        if: steps.gameguard.outputs.had_game == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: _site
+          if-no-files-found: error
+
+      # ---- Deploy to Vercel (prebuilt: Vercel runs no build) -----------------
+      - name: Deploy to Vercel
+        if: >-
+          steps.gameguard.outputs.had_game == 'true' &&
+          (inputs.force == true || steps.dataguard.outputs.had_live_data == 'true') &&
+          env.VERCEL_TOKEN != ''
+        run: |
+          set -euo pipefail
+          npx --yes vercel@latest pull --yes --environment=production --token="$VERCEL_TOKEN"
+          mkdir -p .vercel/output/static
+          cp -r _site/. .vercel/output/static/
+          printf '%s' '{"version":3,"cleanUrls":true,"trailingSlash":false}' > .vercel/output/config.json
+          npx --yes vercel@latest deploy --prebuilt --prod --token="$VERCEL_TOKEN" | tee deploy-url.txt
+          echo "::notice::Deployed $(tail -n1 deploy-url.txt)"
+
+      - name: Explain skipped deploy
+        if: >-
+          steps.gameguard.outputs.had_game == 'true' &&
+          (env.VERCEL_TOKEN == '' ||
+           (inputs.force != true && steps.dataguard.outputs.had_live_data != 'true'))
+        run: |
+          if [ -z "${VERCEL_TOKEN}" ]; then
+            echo "::notice::Render succeeded but Vercel secrets are not set yet — deploy skipped. The site artifact above contains the rendered output."
+          else
+            echo "::notice::Render succeeded but data was synthetic and force was not set — deploy skipped so the public site keeps its last good numbers."
+          fi

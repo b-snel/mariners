@@ -338,3 +338,13 @@ saveRDS(pitching, here("data", "pitching_2026.rds"))
 
 message("Wrote ", nrow(batting), " batter rows and ",
         nrow(pitching), " pitcher rows to data/.")
+
+# Record whether the public-facing batting data came from the live API or the
+# synthetic fallback. The deploy pipeline reads this and refuses to publish
+# synthetic numbers to the public site (see .github/workflows/refresh.yml).
+data_source <- if (is.null(batting_raw)) "synthetic" else "live"
+writeLines(
+  c(data_source, format(Sys.time(), tz = "UTC", "%Y-%m-%dT%H:%M:%SZ")),
+  here("data", "data_source.txt")
+)
+message("Data source: ", data_source)
