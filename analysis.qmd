@@ -17,9 +17,6 @@ behave like the rest. The same motifs work fine on baseball, and baseball has
 the advantage of being immediately legible — you don't need to know what a
 gene does to recognize a player having a hot month.
 
-This notebook walks through four canonical visualisations against the 2026
-Seattle Mariners, six weeks into the season:
-
 | Bioinformatics view              | Baseball mapping                                |
 |----------------------------------|-------------------------------------------------|
 | count / expression matrix        | player × stat table                             |
@@ -30,13 +27,15 @@ Seattle Mariners, six weeks into the season:
 ## Environment
 
 Reproducibility is handled with [`renv`](https://rstudio.github.io/renv/).
-Open the project in **Positron**, run `renv::restore()` once, and every
-package version below is pinned to the lockfile checked into the repo.
+Run `renv::restore()` once and every package version below is pinned to the
+lockfile checked into the repo, so the analysis renders the same anywhere.
 
 ```{r setup}
 # Load all the R packages we need (ggplot2 for charts, dplyr for data wrangling, etc.)
-# "here" makes file paths work regardless of which computer renders this notebook
+# "here" makes file paths work regardless of which computer renders this notebook,
+# and charts.R holds the chart builders shared with the landing page.
 source(here::here("R", "00_setup.R"))
+source(here::here("R", "charts.R"))
 ```
 
 ## 1 · Load the matrix
@@ -45,7 +44,7 @@ source(here::here("R", "00_setup.R"))
 # Pull the latest Mariners batting and pitching numbers from the MLB Stats API
 # (or from a saved backup if we're offline — see the note below).
 # In the deploy pipeline the data is fetched once before rendering, so only
-# fetch here if the saved files are missing (e.g. a standalone render in Positron).
+# fetch here if the saved files are missing (e.g. a standalone render).
 if (!file.exists(here("data", "batting_2026.rds"))) {
   source(here::here("R", "01_fetch_data.R"))
 }
@@ -58,11 +57,10 @@ pitching <- readRDS(here("data", "pitching_2026.rds"))
 batting |> dplyr::arrange(dplyr::desc(pa)) |> head(8) |> knitr::kable(digits = 3)
 ```
 
-The fetch step prefers the live MLB Stats API via `baseballr::mlb_team_stats()`.
-When the call fails — offline laptop, rate limit, conference Wi-Fi — it falls
-back to a deterministic synthetic dataset so the rest of the notebook
-always renders. Same pattern you'd use to ship a teaching notebook that
-doesn't need a live database connection.
+The fetch step prefers the live FanGraphs / MLB Stats API feed. When the call
+fails — no network, a rate limit, an API hiccup — it falls back to a
+deterministic synthetic dataset so the rest of the notebook always renders.
+(On the live site that fallback is detected and never published.)
 
 ## 2 · Heatmap
 
@@ -91,13 +89,12 @@ on a cohort — players with similar offensive profiles end up adjacent.
 #   - Up/down position = how confident we are in that gap (more PAs = higher up)
 #   - Dot size = number of plate appearances (bigger dot = larger sample)
 
-# Six weeks into the season (~180 PA), the sample sizes are too small for
-# the z-test to reach p < 0.05 at realistic wOBA−xwOBA gaps. Instead we
-# color players whose gap exceeds ±0.020 — the y-axis still shows which
-# gaps have the most statistical backing behind them.
+# Even partway through a season, sample sizes are usually too small for the
+# z-test to reach p < 0.05 at realistic wOBA−xwOBA gaps. Instead we color
+# players whose gap exceeds ±0.020 — the y-axis still shows which gaps have
+# the most statistical backing behind them.
 
-source(here::here("R", "03_volcano.R"))
-p   # the volcano ggplot built by the script, drawn inline
+chart_volcano(batting)   # shared builder from R/charts.R
 ```
 
 The x-axis is **effect size**: observed wOBA minus the Statcast expected
@@ -158,20 +155,7 @@ separates power from on-base; PC2 picks up the strikeout/contact axis.
 # A negative bar = pitcher has been better than expected (possibly lucky)
 # A positive bar = pitcher has allowed more runs than his stuff would predict (possibly unlucky)
 
-pitching |>
-  dplyr::arrange(era) |>                              # sort by actual ERA, best first
-  dplyr::mutate(player = forcats::fct_inorder(player)) |>  # keep that sort order in the chart
-  ggplot(aes(x = player, y = era_minus_xera, fill = role)) +
-  geom_col() +
-  geom_hline(yintercept = 0, color = "grey40") +      # reference line: ERA equals xERA
-  coord_flip() +                                       # horizontal bars are easier to read with names
-  scale_fill_manual(values = c(SP = "#0C2C56", RP = "#005C5C")) +  # Mariners navy for starters, teal for relievers
-  labs(
-    title    = "ERA − xERA: Who's getting lucky?",
-    x        = NULL,
-    y        = "ERA − xERA  (negative = outperforming peripherals)",
-    fill     = NULL
-  )
+chart_pitching_luck(pitching)   # shared builder from R/charts.R
 ```
 
 ## 6 · Batting luck chart
@@ -230,7 +214,7 @@ shows — regression candidates to the upside.
 # players below it are producing less (unlucky or poor launch angles).
 
 # If Statcast hard-hit data didn't come through, approximate from SLG
-# (power hitters tend to hit the ball harder — good enough for the demo)
+# (power hitters tend to hit the ball harder — a reasonable stand-in)
 if (!"hard_hit_pct" %in% names(batting) || all(is.na(batting$hard_hit_pct))) {
   set.seed(2026)
   batting$hard_hit_pct <- round(30 + batting$slg * 30 +
@@ -282,43 +266,7 @@ or sequencing luck.
 # High BABIP = hits are falling in (lucky, or elite bat-to-ball skill).
 # Low BABIP = hard-hit balls finding gloves (unlucky, or poor launch angles).
 
-# Compute BABIP from components if not already in the data
-if (!"babip" %in% names(batting) || all(is.na(batting$babip))) {
-  set.seed(2026)
-  batting$babip <- round(0.280 + batting$ba * 0.1 +
-    stats::rnorm(nrow(batting), 0, 0.025), 3)
-}
-
-batting |>
-  dplyr::filter(!is.na(babip)) |>
-  dplyr::arrange(babip) |>
-  dplyr::mutate(
-    player = forcats::fct_inorder(player),
-    luck   = dplyr::case_when(
-      babip > 0.330 ~ "Running hot",
-      babip < 0.270 ~ "Running cold",
-      TRUE          ~ "Normal range"
-    )
-  ) |>
-  ggplot(aes(x = player, y = babip, fill = luck)) +
-  geom_col() +
-  geom_hline(yintercept = 0.300, linetype = "dashed", color = "grey30",
-             linewidth = 0.7) +
-  annotate("text", x = 1, y = 0.305, label = "MLB avg (.300)",
-           hjust = 0, size = 3.2, color = "grey30") +
-  coord_flip() +
-  scale_fill_manual(values = c(
-    "Running hot"  = "#C8102E",
-    "Normal range" = "grey60",
-    "Running cold" = "#0C2C56"
-  )) +
-  labs(
-    title    = "Mariners 2026 — BABIP: who's running hot or cold?",
-    subtitle = "Dashed line = league average (.300); extremes tend to regress",
-    x        = NULL,
-    y        = "BABIP  (batting average on balls in play)",
-    fill     = NULL
-  )
+chart_babip(batting)   # shared builder from R/charts.R
 ```
 
 BABIP is one of the best early-warning indicators in baseball. A hitter
@@ -329,12 +277,3 @@ are candidates to cool off; players in navy are due for positive
 regression. This is the same logic as identifying batch effects in a
 sequencing run — the underlying biology (talent) hasn't changed, just
 the noise around the measurement.
-
-## Takeaways for the demo
-
-- **renv** pins the library; **Positron** is the IDE; **Coder** gives you
-  the workspace. The notebook above does not care which machine renders it.
-- Every plot here has a one-line analogue in a typical RNA-seq pipeline.
-  Swap the matrix and the y-axis label and you have your own workflow.
-- The fetch script's "live or synthetic" toggle is a generally useful
-  pattern for teaching material that needs to work on a plane.

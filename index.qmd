@@ -8,9 +8,10 @@ code-fold: true
 
 ```{r setup, include=FALSE}
 source(here::here("R", "00_setup.R"))
+source(here::here("R", "charts.R"))
 
 # In CI the data is fetched once before the render. When this page is rendered
-# standalone (e.g. in Positron) the .rds files may not exist yet — fetch then.
+# standalone the .rds files may not exist yet — fetch then.
 if (!file.exists(here("data", "batting_2026.rds"))) {
   source(here::here("R", "01_fetch_data.R"))
 }
@@ -46,12 +47,34 @@ Mariners game.
 
 [**Read the full differential analysis →**](analysis.qmd)
 
-## Season at a glance
+## Who's hot, who's not
+
+**Hitters: results vs expectation.** Right of the gates = out-performing their
+batted-ball profile (regression candidates down); left = under-performing (due for
+positive regression). Higher up = more plate appearances behind the gap.
+
+```{r volcano, fig.width = 9, fig.height = 6}
+chart_volcano(batting)
+```
+
+**BABIP — luck on balls in play.** League average is ~.300; sustained extremes are
+rare, so red bars tend to cool off and navy bars tend to warm up.
+
+```{r babip, fig.width = 9, fig.height = 5}
+chart_babip(batting)
+```
+
+**Pitching: ERA vs the peripherals.** Negative bars mean a pitcher has allowed
+fewer runs than his strikeouts, walks, and contact quality would predict.
+
+```{r pitching-luck, fig.width = 9, fig.height = 5}
+chart_pitching_luck(pitching)
+```
+
+## The numbers
 
 The biggest gaps between what hitters have actually produced (**wOBA**) and what
-their batted-ball quality says they *should* have produced (**xwOBA**). Positive =
-out-performing the profile (regression candidates down); negative = under-performing
-(due for positive regression).
+their batted-ball quality says they *should* have produced (**xwOBA**).
 
 ```{r glance}
 glance <- batting |>
@@ -90,10 +113,7 @@ knitr::kable(under, row.names = FALSE)
 
 :::
 
-## Pitching: who's been lucky?
-
-ERA minus xERA — negative means a pitcher has allowed fewer runs than his
-peripherals predict.
+**Pitching staff — ERA − xERA**
 
 ```{r pitching-glance}
 pitching |>

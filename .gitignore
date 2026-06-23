@@ -18,3 +18,4 @@ analysis.html
 /.vercel/
 *_files/
 deploy-url.txt
+.vercel
