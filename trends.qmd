@@ -35,9 +35,13 @@ if (identical(war_source, "synthetic")) {
 ```
 
 **WAR** (wins above replacement) rolls a player's entire season — offense, defense,
-baserunning, or run prevention — into one number measuring how many wins they've added
-versus a freely-available replacement. It only accumulates, so each line below climbs
-over the year; a **steep stretch is a hot streak**, a **flat stretch is a cold one**.
+baserunning, or run prevention — into one number: how many wins they've added versus a
+freely-available replacement player. It's a running season total, but it is **not**
+one-directional. Each game's contribution can be negative — a cold bat, a misplayed ball,
+a baserunning blunder all *subtract* — and the replacement bar keeps rising with playing
+time, so a player has to produce above it just to hold steady. Read the slope: **rising =
+a hot, above-replacement stretch**, **flat = treading water**, and **falling = the player
+has been worth less than replacement lately** (see Rob Refsnyder below).
 
 Use the selector to zoom the timeline to the last few days or the whole season. By
 default the chart shows the **biggest movers** in the chosen window — the players who
@@ -115,7 +119,7 @@ Plot.plot({
   height: 540,
   marginRight: 130,
   x: { label: "Date", type: "utc" },
-  y: { label: "Cumulative WAR ↑", grid: true },
+  y: { label: "Cumulative season WAR", grid: true },
   color: { legend: !showAll },
   marks: [
     Plot.ruleY([0], { stroke: "#999" }),
@@ -145,7 +149,8 @@ md`*${showAll
 
 ---
 
-*WAR here is season-cumulative: picking a shorter window zooms the x-axis but keeps
-each line's running total, so you read recent form as the **slope** of the line over
-that span. Live trends are reconstructed from FanGraphs game logs and refresh with the
-rest of the site the morning after each game.*
+*WAR here is the season running total: picking a shorter window zooms the x-axis but
+keeps each line's accumulated value, so you read recent form as the **slope** of the line
+over that span. Live trends are reconstructed from FanGraphs date-range leaderboards
+(season-to-date WAR sampled weekly) and refresh with the rest of the site the morning
+after each game.*

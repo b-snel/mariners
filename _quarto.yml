@@ -25,7 +25,7 @@ website:
       - href: /analysis
         text: Full analysis
       - href: /trends
-        text: WAR trends
+        text: Trends
     right:
       - icon: github
         href: https://github.com/b-snel/mariners
