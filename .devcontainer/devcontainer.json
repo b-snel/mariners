@@ -4,9 +4,12 @@
   // Open the repo in VS Code and run "Dev Containers: Reopen in Container".
   "name": "Mariners 2026 (R + Quarto)",
 
-  // rocker's tidyverse image ships R 4.5.2 plus the system -dev libraries the
-  // tidyverse/graphics stack needs, so renv::restore() has far less to compile.
-  "image": "ghcr.io/rocker-org/devcontainer/tidyverse:4.5.2",
+  // Canonical rocker image, tagged by exact R version and based on Ubuntu
+  // 24.04 (noble) — matching CI. It ships preconfigured to install binary
+  // packages from Posit Package Manager, so renv::restore() is fast.
+  // (If this exact patch tag ever disappears, "rocker/r-ver:latest" works.)
+  "image": "docker.io/rocker/r-ver:4.5.2",
+  "remoteUser": "root",
 
   "features": {
     // Quarto CLI for `quarto render` / `quarto preview`.
@@ -15,10 +18,12 @@
     "ghcr.io/devcontainers/features/node:1": { "version": "22" }
   },
 
-  // Install the remaining system libs the lockfile needs (matches the CI
-  // "System libraries" step), then restore the exact pinned package versions.
-  "onCreateCommand": "sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends libcurl4-openssl-dev libssl-dev libxml2-dev libfontconfig1-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libharfbuzz-dev libfribidi-dev",
-  "postCreateCommand": "Rscript -e 'if (!requireNamespace(\"renv\", quietly = TRUE)) install.packages(\"renv\", repos = \"https://packagemanager.posit.co/cran/__linux__/noble/latest\"); renv::restore(prompt = FALSE)'",
+  // System libraries the lockfile's packages need at runtime (mirrors the CI
+  // "System libraries" step). rocker/r-ver is minimal, so install them here.
+  "onCreateCommand": "apt-get update -qq && apt-get install -y --no-install-recommends git ca-certificates locales libcurl4-openssl-dev libssl-dev libxml2-dev libfontconfig1-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libharfbuzz-dev libfribidi-dev",
+
+  // Restore the exact pinned package versions from renv.lock.
+  "postCreateCommand": "Rscript -e 'if (!requireNamespace(\"renv\", quietly = TRUE)) install.packages(\"renv\"); renv::restore(prompt = FALSE)'",
 
   // Quarto preview picks a port at random; forwarding a small range covers it.
   "forwardPorts": [4200, 3838],
@@ -31,7 +36,6 @@
         "ms-vscode.live-server"
       ],
       "settings": {
-        "r.rterm.linux": "/usr/local/bin/radian",
         "files.eol": "\n"
       }
     }
