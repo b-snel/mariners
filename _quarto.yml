@@ -42,6 +42,8 @@ format:
     code-fold: show
     code-tools: true
     embed-resources: false
+    include-in-header:
+      - vercel-analytics.html
 
 execute:
   warning: false
