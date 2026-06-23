@@ -47,7 +47,7 @@ jobs:
         id: gameguard
         run: |
           set -euo pipefail
-          if [ "${{ inputs.force }}" = "true" ]; then
+          if [ "${{ inputs.force }}" = "true" ] || [ "${{ github.event_name }}" = "push" ]; then
             echo "force=true → skipping game check"
             echo "had_game=true" >> "$GITHUB_OUTPUT"
             exit 0
