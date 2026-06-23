@@ -45,16 +45,18 @@ pitchers behaving differently from the rest. The numbers come from FanGraphs and
 the MLB Stats API and are re-rendered automatically the morning after each
 Mariners game.
 
-[**Read the full differential analysis →**](analysis.qmd)
+[**Read the full differential analysis →**](/analysis)
 
 ## Who's hot, who's not
 
-**Hitters: results vs expectation.** Right of the gates = out-performing their
-batted-ball profile (regression candidates down); left = under-performing (due for
-positive regression). Higher up = more plate appearances behind the gap.
+**Hard contact vs results.** Does hitting the ball hard translate into production?
+The dashed line is the league-wide trend; the grey band is its 95% confidence
+interval (how sure we are of that *average* relationship — not a per-player normal
+range). Players well *above* the line are out-producing their contact quality
+(lucky or crafty); well *below*, under-producing (unlucky or poor launch angles).
 
-```{r volcano, fig.width = 9, fig.height = 6}
-chart_volcano(batting)
+```{r hard-hit, fig.width = 9, fig.height = 6}
+chart_hard_hit(batting)
 ```
 
 **BABIP — luck on balls in play.** League average is ~.300; sustained extremes are

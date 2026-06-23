@@ -16,9 +16,11 @@ website:
     background: "#0C2C56"
     foreground: "#C4CED4"
     left:
-      - href: index.qmd
+      # Clean (extensionless) hrefs so they resolve under Vercel cleanUrls —
+      # Quarto's default *.qmd→*.html links 404 against the clean-URL host.
+      - href: /
         text: Home
-      - href: analysis.qmd
+      - href: /analysis
         text: Full analysis
     right:
       - icon: github

@@ -3,5 +3,6 @@
   "framework": null,
   "buildCommand": "",
   "outputDirectory": "_site",
+  "cleanUrls": true,
   "trailingSlash": false
 }
