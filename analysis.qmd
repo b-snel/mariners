@@ -70,12 +70,11 @@ doesn't need a live database connection.
 # Build the heatmap: each column is a player, each row is an offensive stat
 # Colors show how far above or below average each player is for that stat
 # Players with similar hitting profiles get grouped together automatically (the tree on top)
+# Skip the script's PNG write (its dev.off() would break knitr's figure capture),
+# then build the heatmap silently and grid.draw its gtable on knitr's device.
+options(mariners.skip_png = TRUE)
 source(here::here("R", "02_heatmap.R"))
-# pheatmap's side-effect draw isn't reliably captured after the script's PNG
-# device closes, so build it silently and grid.draw the gtable on knitr's device.
-ph <- draw_heatmap(silent = TRUE)
-grid::grid.newpage()
-grid::grid.draw(ph$gtable)
+grid::grid.draw(draw_heatmap(silent = TRUE)$gtable)
 ```
 
 Read this exactly like an expression heatmap: columns are samples (players),

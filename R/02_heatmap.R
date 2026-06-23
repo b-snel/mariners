@@ -62,10 +62,14 @@ draw_heatmap <- function(silent = FALSE) {
   )
 }
 
-invisible({
-  png(here("figures", "02_heatmap.png"),
-      width = 1600, height = 1100, res = 180)
-  tryCatch(draw_heatmap(), finally = dev.off())
-})
-
-message("Wrote figures/02_heatmap.png")
+# Skip the PNG write when sourced by the Quarto notebook: opening and closing a
+# png device mid-chunk leaves R's null device current, which breaks knitr's
+# inline figure capture. Standalone runs (and 05_export.R) still get the PNG.
+if (!isTRUE(getOption("mariners.skip_png"))) {
+  invisible({
+    png(here("figures", "02_heatmap.png"),
+        width = 1600, height = 1100, res = 180)
+    tryCatch(draw_heatmap(), finally = dev.off())
+  })
+  message("Wrote figures/02_heatmap.png")
+}
