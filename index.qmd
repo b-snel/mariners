@@ -45,7 +45,7 @@ pitchers behaving differently from the rest. The numbers come from FanGraphs and
 the MLB Stats API and are re-rendered automatically the morning after each
 Mariners game.
 
-[**Read the full differential analysis →**](/analysis)
+[**Read the full differential analysis →**](analysis.qmd)
 
 ## Who's hot, who's not
 

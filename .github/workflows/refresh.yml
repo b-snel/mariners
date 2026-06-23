@@ -136,7 +136,7 @@ jobs:
           npx --yes vercel@latest pull --yes --environment=production --token="$VERCEL_TOKEN"
           mkdir -p .vercel/output/static
           cp -r _site/. .vercel/output/static/
-          printf '%s' '{"version":3,"cleanUrls":true,"trailingSlash":false}' > .vercel/output/config.json
+          printf '%s' '{"version":3,"trailingSlash":false}' > .vercel/output/config.json
           npx --yes vercel@latest deploy --prebuilt --prod --token="$VERCEL_TOKEN" | tee deploy-url.txt
           echo "::notice::Deployed $(tail -n1 deploy-url.txt)"
 
