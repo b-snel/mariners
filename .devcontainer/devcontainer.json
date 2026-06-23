@@ -1,0 +1,39 @@
+{
+  // Local dev environment that mirrors the GitHub Actions render pipeline
+  // (see .github/workflows/refresh.yml): R 4.5.2 + renv + Quarto + Node.
+  // Open the repo in VS Code and run "Dev Containers: Reopen in Container".
+  "name": "Mariners 2026 (R + Quarto)",
+
+  // rocker's tidyverse image ships R 4.5.2 plus the system -dev libraries the
+  // tidyverse/graphics stack needs, so renv::restore() has far less to compile.
+  "image": "ghcr.io/rocker-org/devcontainer/tidyverse:4.5.2",
+
+  "features": {
+    // Quarto CLI for `quarto render` / `quarto preview`.
+    "ghcr.io/rocker-org/devcontainer-features/quarto-cli:1": {},
+    // Node is used by the Vercel deploy step; handy to have locally too.
+    "ghcr.io/devcontainers/features/node:1": { "version": "22" }
+  },
+
+  // Install the remaining system libs the lockfile needs (matches the CI
+  // "System libraries" step), then restore the exact pinned package versions.
+  "onCreateCommand": "sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends libcurl4-openssl-dev libssl-dev libxml2-dev libfontconfig1-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libharfbuzz-dev libfribidi-dev",
+  "postCreateCommand": "Rscript -e 'if (!requireNamespace(\"renv\", quietly = TRUE)) install.packages(\"renv\", repos = \"https://packagemanager.posit.co/cran/__linux__/noble/latest\"); renv::restore(prompt = FALSE)'",
+
+  // Quarto preview picks a port at random; forwarding a small range covers it.
+  "forwardPorts": [4200, 3838],
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "quarto.quarto",
+        "REditorSupport.r",
+        "ms-vscode.live-server"
+      ],
+      "settings": {
+        "r.rterm.linux": "/usr/local/bin/radian",
+        "files.eol": "\n"
+      }
+    }
+  }
+}

@@ -15,6 +15,7 @@ on:
       - "docs/**"
       - "**/*.md"
       - ".gitignore"
+      - ".devcontainer/**"
   schedule:
     # Times are UTC. FanGraphs season leaderboards finish loading ~5–6am ET,
     # so we render after that. Offset minute :17 avoids top-of-hour cron delays.
