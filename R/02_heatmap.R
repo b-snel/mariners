@@ -47,7 +47,7 @@ if (has_positions) {
 # Draw function so the same heatmap can be written to a PNG (for 05_export.R
 # and standalone use) and also drawn inline on the active device by the Quarto
 # notebook — which avoids any include_graphics() path resolution.
-draw_heatmap <- function() {
+draw_heatmap <- function(silent = FALSE) {
   pheatmap::pheatmap(
     mat,
     color             = viridis::magma(100),
@@ -57,7 +57,8 @@ draw_heatmap <- function() {
     cluster_cols      = TRUE,
     fontsize          = 11,
     main              = "Mariners 2026 — Z-scored batting features (player × stat)",
-    border_color      = NA
+    border_color      = NA,
+    silent            = silent      # silent=TRUE returns the gtable without drawing
   )
 }
 

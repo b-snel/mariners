@@ -71,8 +71,11 @@ doesn't need a live database connection.
 # Colors show how far above or below average each player is for that stat
 # Players with similar hitting profiles get grouped together automatically (the tree on top)
 source(here::here("R", "02_heatmap.R"))
-# Draw inline so knitr owns the figure file — no external PNG path to resolve.
-draw_heatmap()
+# pheatmap's side-effect draw isn't reliably captured after the script's PNG
+# device closes, so build it silently and grid.draw the gtable on knitr's device.
+ph <- draw_heatmap(silent = TRUE)
+grid::grid.newpage()
+grid::grid.draw(ph$gtable)
 ```
 
 Read this exactly like an expression heatmap: columns are samples (players),
