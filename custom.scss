@@ -126,3 +126,11 @@ table {
 .cell-output-display form {
   margin: 0.4rem 0;
 }
+
+// Discreet hover-for-detail terms (e.g. the fWAR explainer on the Trends page).
+abbr[title] {
+  text-decoration: underline dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  cursor: help;
+}

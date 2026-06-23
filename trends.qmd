@@ -36,7 +36,8 @@ if (identical(war_source, "synthetic")) {
 
 **WAR** (wins above replacement) rolls a player's entire season — offense, defense,
 baserunning, or run prevention — into one number: how many wins they've added versus a
-freely-available replacement player. It's a running season total, but it is **not**
+freely-available replacement player. These are <abbr title="fWAR = FanGraphs WAR. Pitching WAR is built from FIP — strikeouts, walks, and home runs allowed — while hitting, baserunning, and defense use FanGraphs' run values. It differs from Baseball-Reference's bWAR, which is based on actual runs allowed and DRS; the two can diverge, especially for pitchers.">fWAR</abbr>
+figures (FanGraphs' version). It's a running season total, but it is **not**
 one-directional. Each game's contribution can be negative — a cold bat, a misplayed ball,
 a baserunning blunder all *subtract* — and the replacement bar keeps rising with playing
 time, so a player has to produce above it just to hold steady. Read the slope: **rising =
