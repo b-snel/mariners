@@ -71,8 +71,8 @@ doesn't need a live database connection.
 # Colors show how far above or below average each player is for that stat
 # Players with similar hitting profiles get grouped together automatically (the tree on top)
 source(here::here("R", "02_heatmap.R"))
-# Relative path (not here()) so Quarto copies the PNG into the rendered _site/.
-knitr::include_graphics("figures/02_heatmap.png")
+# Draw inline so knitr owns the figure file — no external PNG path to resolve.
+draw_heatmap()
 ```
 
 Read this exactly like an expression heatmap: columns are samples (players),
@@ -95,7 +95,7 @@ on a cohort — players with similar offensive profiles end up adjacent.
 # gaps have the most statistical backing behind them.
 
 source(here::here("R", "03_volcano.R"))
-knitr::include_graphics("figures/03_volcano.png")
+p   # the volcano ggplot built by the script, drawn inline
 ```
 
 The x-axis is **effect size**: observed wOBA minus the Statcast expected
@@ -140,7 +140,7 @@ those gates are the season's "differentially expressed" hitters.
 # Connor Joe (top center) — contact-first, doesn't strike out, but not much power either
 
 source(here::here("R", "04_pca.R"))
-knitr::include_graphics("figures/04_pca.png")
+p   # the PCA biplot built by the script, drawn inline
 ```
 
 Same biplot you'd produce from `prcomp()` on a count matrix: the player

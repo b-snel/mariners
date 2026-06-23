@@ -44,23 +44,27 @@ if (has_positions) {
   annot_colors <- NA
 }
 
+# Draw function so the same heatmap can be written to a PNG (for 05_export.R
+# and standalone use) and also drawn inline on the active device by the Quarto
+# notebook — which avoids any include_graphics() path resolution.
+draw_heatmap <- function() {
+  pheatmap::pheatmap(
+    mat,
+    color             = viridis::magma(100),
+    annotation_col    = annot_col,
+    annotation_colors = if (identical(annot_colors, NA)) NA else annot_colors,
+    cluster_rows      = TRUE,
+    cluster_cols      = TRUE,
+    fontsize          = 11,
+    main              = "Mariners 2026 — Z-scored batting features (player × stat)",
+    border_color      = NA
+  )
+}
+
 invisible({
   png(here("figures", "02_heatmap.png"),
       width = 1600, height = 1100, res = 180)
-  tryCatch(
-    pheatmap::pheatmap(
-      mat,
-      color             = viridis::magma(100),
-      annotation_col    = annot_col,
-      annotation_colors = if (identical(annot_colors, NA)) NA else annot_colors,
-      cluster_rows      = TRUE,
-      cluster_cols      = TRUE,
-      fontsize          = 11,
-      main              = "Mariners 2026 — Z-scored batting features (player × stat)",
-      border_color      = NA
-    ),
-    finally = dev.off()
-  )
+  tryCatch(draw_heatmap(), finally = dev.off())
 })
 
 message("Wrote figures/02_heatmap.png")
