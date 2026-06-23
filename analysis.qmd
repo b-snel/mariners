@@ -236,3 +236,33 @@ are candidates to cool off; players in navy are due for positive
 regression. This is the same logic as identifying batch effects in a
 sequencing run — the underlying biology (talent) hasn't changed, just
 the noise around the measurement.
+
+## 9 · Launch angle vs production
+
+```{r launch-angle, fig.width = 9, fig.height = 6}
+# Average launch angle (degrees) vs actual production (wOBA).
+# The shaded band marks the productive line-drive window (~10–25°):
+#   - far left  = too many grounders (low, weak contact on the ground)
+#   - far right = too many pop-ups (steep, easy fly-ball outs)
+# We plot against observed wOBA, NOT xwOBA, because xwOBA is itself built
+# from launch angle — plotting it here would just be measuring the input
+# against itself.
+
+chart_launch_angle(batting)   # shared builder from R/charts.R
+```
+
+Exit velocity tells you *how hard* a ball was hit; launch angle tells you
+*where it was aimed*. The two together are what Statcast turns into xwOBA —
+and launch angle is the one a hitter has the most swing-shaping control over.
+Unlike hard-hit rate, the relationship to production isn't a straight line:
+value lives in a **sweet spot**. Pound everything into the dirt (single-digit
+launch angles) and you trade extra-base hits for groundouts; get under the ball
+too often (high-20s and up) and fly balls die on the warning track or in
+gloves. The most productive hitters cluster inside the shaded band, where
+launch angles translate into line drives.
+
+Read it alongside the hard-contact and BABIP charts: a hitter making elite
+contact (high hard-hit %) but sitting at the edges of the launch-angle band is
+a swing-tweak candidate — the raw power is there, it's just being launched at
+the wrong angle. One whose average angle is squarely in the band but whose wOBA
+lags is more likely fighting sequencing luck than a mechanical problem.

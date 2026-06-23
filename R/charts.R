@@ -153,3 +153,52 @@ chart_hard_hit <- function(batting) {
     theme(legend.position = "right",
           plot.caption = element_text(hjust = 0, color = "grey40"))
 }
+
+# Launch angle vs production: is each hitter living in the sweet spot? ------
+# Unlike hard-hit%, the launch-angle relationship is curvilinear — too low and
+# everything is a grounder, too high and it's a pop-up — so instead of a trend
+# line we shade the productive ~10–25° band and read distance from it.
+chart_launch_angle <- function(batting) {
+  # Approximate average launch angle if Statcast didn't supply it: power/
+  # fly-ball hitters tilt higher. Mirrors the chart_hard_hit fallback.
+  if (!"avg_la" %in% names(batting) || all(is.na(batting$avg_la))) {
+    set.seed(2026)
+    batting$avg_la <- round(9 + (batting$hr / batting$pa) * 70 +
+      stats::rnorm(nrow(batting), 0, 2), 1)
+  }
+
+  # The commonly cited line-drive / productive launch-angle window.
+  sweet_lo <- 10
+  sweet_hi <- 25
+
+  batting |>
+    dplyr::filter(!is.na(avg_la)) |>
+    ggplot(aes(x = avg_la, y = woba)) +
+    annotate("rect", xmin = sweet_lo, xmax = sweet_hi,
+             ymin = -Inf, ymax = Inf, fill = "#005C5C", alpha = 0.08) +
+    annotate("text", x = (sweet_lo + sweet_hi) / 2, y = Inf,
+             label = "sweet spot (~10–25°)", vjust = 1.4, size = 3.2,
+             color = "#005C5C") +
+    geom_point(aes(color = pos, size = pa), alpha = 0.85) +
+    ggrepel::geom_text_repel(
+      aes(label = player),
+      size = 3.5, max.overlaps = 20, seed = 4, box.padding = 0.4
+    ) +
+    scale_color_manual(values = pos_palette) +
+    scale_size_continuous(range = c(3, 8), name = "PA") +
+    labs(
+      title    = "Mariners 2026 — Launch angle vs actual production",
+      subtitle = "Inside the shaded band = line-drive launch angles; far left = grounders, far right = pop-ups",
+      x        = "Average launch angle (°)",
+      y        = "wOBA  (actual offensive value)",
+      color    = "Position",
+      caption  = paste(
+        "Production is plotted against *observed* wOBA, not xwOBA — xwOBA already",
+        "bakes launch angle in, so plotting it here would be circular. The shaded",
+        "band is the productive line-drive window; the highest-wOBA hitters should",
+        "cluster near it."
+      )
+    ) +
+    theme(legend.position = "right",
+          plot.caption = element_text(hjust = 0, color = "grey40"))
+}

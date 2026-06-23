@@ -11,8 +11,9 @@ source(here::here("R", "00_setup.R"))
 
 # ---- Helpers ------------------------------------------------------------
 
-# Fetch primary position for each active roster member via the MLB Stats API.
-# Returns a two-column tibble: player (name) + pos (abbreviation e.g. "CF").
+# Fetch primary position + MLBAM id for each active roster member via the MLB
+# Stats API. Returns a tibble: player (name) + pos (abbreviation e.g. "CF") +
+# mlbam_id (the player id used to build Baseball Savant links).
 fetch_positions <- function(team_id, season) {
   tryCatch({
     roster <- baseballr::mlb_rosters(
@@ -22,8 +23,9 @@ fetch_positions <- function(team_id, season) {
     )
     roster |>
       dplyr::select(
-        player = person_full_name,
-        pos    = position_abbreviation
+        player    = person_full_name,
+        pos       = position_abbreviation,
+        mlbam_id  = person_id
       ) |>
       dplyr::distinct(player, .keep_all = TRUE)
   }, error = function(e) {
@@ -65,7 +67,8 @@ try_fetch_batting <- function(season, team_abbr = "SEA") {
         for (metric in list(
           list(target = "hard_hit_pct", candidates = c("HardHit%", "Hard%", "HardHit")),
           list(target = "barrel_pct",   candidates = c("Barrel%", "Barrel")),
-          list(target = "avg_ev",       candidates = c("EV", "maxEV", "AvgEV", "avg_hit_speed"))
+          list(target = "avg_ev",       candidates = c("EV", "maxEV", "AvgEV", "avg_hit_speed")),
+          list(target = "avg_la",       candidates = c("LA", "Launch Angle", "avg_launch_angle", "LaunchAngle"))
         )) {
           src <- Find(function(x) x %in% names(statcast), metric$candidates)
           if (!is.null(src)) {
@@ -202,14 +205,15 @@ normalize_batting <- function(df, positions = NULL) {
 
   df$diff <- round(df$woba - df$xwoba, 3)
 
-  # Coerce Statcast hard-hit metrics to numeric if they came through
-  for (col in c("hard_hit_pct", "barrel_pct", "avg_ev")) {
+  # Coerce Statcast hard-hit / batted-ball metrics to numeric if they came through
+  for (col in c("hard_hit_pct", "barrel_pct", "avg_ev", "avg_la")) {
     if (col %in% names(df)) df[[col]] <- suppressWarnings(as.numeric(df[[col]]))
   }
 
   keep <- intersect(
-    c("player", "pos", "pa", "hr", "bb", "k", "ba", "obp", "slg",
-      "woba", "xwoba", "diff", "babip", "hard_hit_pct", "barrel_pct", "avg_ev"),
+    c("player", "pos", "mlbam_id", "pa", "hr", "bb", "k", "ba", "obp", "slg",
+      "woba", "xwoba", "diff", "babip", "hard_hit_pct", "barrel_pct", "avg_ev",
+      "avg_la"),
     names(df)
   )
   df[, keep, drop = FALSE]
@@ -273,19 +277,19 @@ normalize_pitching <- function(df) {
 synth_batting <- function() {
   set.seed(2026)
   players <- tibble::tribble(
-    ~player,             ~pos,  ~pa,  ~hr, ~bb,  ~k,  ~ba,    ~obp,   ~slg,   ~xwoba,
-    "Cal Raleigh",        "C",   168,  12,  21,  44,  0.252,  0.341,  0.531,  0.382,
-    "Julio Rodriguez",    "CF",  172,   8,  18,  46,  0.279,  0.349,  0.476,  0.371,
-    "Jorge Polanco",      "2B",  155,   7,  14,  35,  0.268,  0.336,  0.461,  0.354,
-    "Randy Arozarena",    "LF",  161,   6,  19,  41,  0.234,  0.327,  0.402,  0.343,
-    "J.P. Crawford",      "SS",  158,   3,  24,  29,  0.247,  0.358,  0.358,  0.326,
-    "Luke Raley",         "RF",  142,   8,  12,  38,  0.261,  0.331,  0.498,  0.361,
-    "Dominic Canzone",    "RF",  118,   5,   9,  31,  0.241,  0.305,  0.428,  0.318,
-    "Mitch Garver",       "DH",  121,   6,  14,  33,  0.219,  0.314,  0.408,  0.339,
-    "Dylan Moore",        "UT",  104,   4,  13,  29,  0.232,  0.327,  0.382,  0.305,
-    "Victor Robles",      "CF",   89,   2,   8,  19,  0.281,  0.348,  0.397,  0.298,
-    "Leo Rivas",          "SS",   72,   1,   9,  18,  0.225,  0.319,  0.295,  0.272,
-    "Tyler Locklear",     "1B",   64,   3,   5,  21,  0.214,  0.281,  0.411,  0.331
+    ~player,             ~pos, ~mlbam_id, ~pa,  ~hr, ~bb,  ~k,  ~ba,    ~obp,   ~slg,   ~xwoba,
+    "Cal Raleigh",        "C",  663728,   168,  12,  21,  44,  0.252,  0.341,  0.531,  0.382,
+    "Julio Rodriguez",    "CF", 677594,   172,   8,  18,  46,  0.279,  0.349,  0.476,  0.371,
+    "Jorge Polanco",      "2B", 593871,   155,   7,  14,  35,  0.268,  0.336,  0.461,  0.354,
+    "Randy Arozarena",    "LF", 668227,   161,   6,  19,  41,  0.234,  0.327,  0.402,  0.343,
+    "J.P. Crawford",      "SS", 641487,   158,   3,  24,  29,  0.247,  0.358,  0.358,  0.326,
+    "Luke Raley",         "RF", 642528,   142,   8,  12,  38,  0.261,  0.331,  0.498,  0.361,
+    "Dominic Canzone",    "RF", 666181,   118,   5,   9,  31,  0.241,  0.305,  0.428,  0.318,
+    "Mitch Garver",       "DH", 641598,   121,   6,  14,  33,  0.219,  0.314,  0.408,  0.339,
+    "Dylan Moore",        "UT", 642129,   104,   4,  13,  29,  0.232,  0.327,  0.382,  0.305,
+    "Victor Robles",      "CF", 645302,    89,   2,   8,  19,  0.281,  0.348,  0.397,  0.298,
+    "Leo Rivas",          "SS", 678877,    72,   1,   9,  18,  0.225,  0.319,  0.295,  0.272,
+    "Tyler Locklear",     "1B", 691435,    64,   3,   5,  21,  0.214,  0.281,  0.411,  0.331
   )
   players |> dplyr::mutate(
     woba         = round((0.69 * bb + 0.89 * (ba * pa) + 0.5 * hr) / pa, 3),
@@ -293,26 +297,28 @@ synth_batting <- function() {
     babip        = round(0.280 + ba * 0.1 + stats::rnorm(dplyr::n(), 0, 0.025), 3),
     hard_hit_pct = round(30 + slg * 30 + stats::rnorm(dplyr::n(), 0, 3), 1),
     barrel_pct   = round(3 + hr / pa * 200 + stats::rnorm(dplyr::n(), 0, 1.5), 1),
-    avg_ev       = round(85 + slg * 10 + stats::rnorm(dplyr::n(), 0, 1), 1)
+    avg_ev       = round(85 + slg * 10 + stats::rnorm(dplyr::n(), 0, 1), 1),
+    # Average launch angle: fly-ball/power hitters tip higher; ~9–22° range.
+    avg_la       = round(9 + hr / pa * 70 + stats::rnorm(dplyr::n(), 0, 2), 1)
   )
 }
 
 synth_pitching <- function() {
   set.seed(2026L + 1L)
   tibble::tribble(
-    ~player,            ~role, ~ip,  ~k,   ~bb, ~hr,  ~era,  ~fip,  ~xera,
-    "Logan Gilbert",      "SP", 48.1, 56,  10,  4,   2.79,  3.05,  3.21,
-    "Luis Castillo",      "SP", 45.2, 49,  13,  6,   3.55,  3.71,  3.62,
-    "George Kirby",       "SP", 47.0, 44,   6,  5,   3.07,  3.18,  3.04,
-    "Bryce Miller",       "SP", 42.0, 41,  11,  7,   4.07,  4.21,  3.98,
-    "Bryan Woo",          "SP", 39.1, 38,   8,  5,   3.43,  3.55,  3.40,
-    "Andres Munoz",       "RP", 17.2, 23,   4,  1,   1.53,  1.84,  2.10,
-    "Matt Brash",         "RP", 16.0, 21,   6,  2,   2.81,  3.07,  3.20,
-    "Gabe Speier",        "RP", 15.1, 14,   5,  2,   3.52,  3.99,  3.61,
-    "Collin Snider",      "RP", 14.0, 12,   4,  3,   4.50,  4.71,  4.32,
-    "Trent Thornton",     "RP", 13.2, 13,   5,  2,   3.95,  4.18,  4.05,
-    "Carlos Vargas",      "RP", 12.0, 11,   7,  1,   4.50,  5.02,  4.61,
-    "Casey Lawrence",     "RP", 11.0,  8,   3,  3,   5.73,  5.41,  5.10
+    ~player,            ~role, ~mlbam_id, ~ip,  ~k,   ~bb, ~hr,  ~era,  ~fip,  ~xera,
+    "Logan Gilbert",      "SP", 669302,   48.1, 56,  10,  4,   2.79,  3.05,  3.21,
+    "Luis Castillo",      "SP", 622491,   45.2, 49,  13,  6,   3.55,  3.71,  3.62,
+    "George Kirby",       "SP", 669923,   47.0, 44,   6,  5,   3.07,  3.18,  3.04,
+    "Bryce Miller",       "SP", 682243,   42.0, 41,  11,  7,   4.07,  4.21,  3.98,
+    "Bryan Woo",          "SP", 686613,   39.1, 38,   8,  5,   3.43,  3.55,  3.40,
+    "Andres Munoz",       "RP", 650633,   17.2, 23,   4,  1,   1.53,  1.84,  2.10,
+    "Matt Brash",         "RP", 676979,   16.0, 21,   6,  2,   2.81,  3.07,  3.20,
+    "Gabe Speier",        "RP", 656657,   15.1, 14,   5,  2,   3.52,  3.99,  3.61,
+    "Collin Snider",      "RP", 656626,   14.0, 12,   4,  3,   4.50,  4.71,  4.32,
+    "Trent Thornton",     "RP", 642558,   13.2, 13,   5,  2,   3.95,  4.18,  4.05,
+    "Carlos Vargas",      "RP", 671096,   12.0, 11,   7,  1,   4.50,  5.02,  4.61,
+    "Casey Lawrence",     "RP", 595928,   11.0,  8,   3,  3,   5.73,  5.41,  5.10
   ) |> dplyr::mutate(
     era_minus_xera = round(era - xera, 3),
     k_per_9 = round(k / ip * 9, 2),
@@ -338,6 +344,15 @@ pitching     <- if (is.null(pitching_raw)) synth_pitching() else normalize_pitch
 # consumer (the notebook, the landing page, the figure scripts) behaves the same.
 batting  <- tibble::as_tibble(batting)
 pitching <- tibble::as_tibble(pitching)
+
+# Attach MLBAM ids to the live pitching feed (FanGraphs has no player id, so we
+# join from the roster by name). The synthetic fallback already carries its own
+# ids, and the batting normalizer picks them up via its roster join.
+if (!"mlbam_id" %in% names(pitching) && !is.null(positions) && nrow(positions) > 0) {
+  pitching <- dplyr::left_join(
+    pitching, positions[, c("player", "mlbam_id")], by = "player"
+  )
+}
 
 saveRDS(batting,  here("data", "batting_2026.rds"))
 saveRDS(pitching, here("data", "pitching_2026.rds"))

@@ -47,6 +47,57 @@ Mariners game.
 
 [**Read the full differential analysis →**](/analysis)
 
+## Stat glossary
+
+New to the sabermetric alphabet soup? Here's what every stat on this page means.
+
+::: {.stat-glossary}
+<dl>
+<dt>wOBA — weighted on-base average</dt>
+<dd>One number that captures a hitter's total offensive value. Instead of treating
+every time on base equally (like OBP does), it weights each outcome — walk, single,
+double, triple, home run — by how much that event is actually worth in run-scoring
+terms. It's scaled to look like OBP, so league average is about **.320**, a good
+hitter is around **.370**, and an elite one pushes **.400+**. Higher is better.</dd>
+
+<dt>xwOBA — expected weighted on-base average</dt>
+<dd>What a hitter <em>should</em> have produced based on <strong>how</strong> they hit
+the ball, not whether it found a glove. Statcast feeds the exit velocity and launch
+angle of every batted ball (plus sprint speed on grounders) into a model that returns
+the wOBA a typical hitter earns on contact like that. Because it strips out luck,
+defense, and ballpark, comparing it to actual wOBA is revealing: <strong>wOBA − xwOBA
+above zero</strong> means a hitter is out-producing their contact quality (riding hot,
+likely to cool off), while <strong>below zero</strong> flags strong contact that hasn't
+paid off yet (an upside regression candidate).</dd>
+
+<dt>BABIP — batting average on balls in play</dt>
+<dd>Batting average counting only balls put in play — home runs and strikeouts are
+excluded. League average sits near <strong>.300</strong>, and sustained extremes are
+rare, so a sky-high BABIP usually signals good luck or favorable sequencing that
+regresses, and a very low one signals the opposite.</dd>
+
+<dt>ERA / xERA — earned run average vs. expected</dt>
+<dd><strong>ERA</strong> is the earned runs a pitcher allows per nine innings — the
+classic bottom-line number. <strong>xERA</strong> is the contact-quality-based
+expectation, derived the same way as xwOBA. <strong>ERA − xERA</strong> separates skill
+from luck: a negative gap means a pitcher has allowed fewer runs than their stuff
+predicts (possibly lucky), a positive gap the reverse.</dd>
+
+<dt>Hard-hit %, exit velocity & launch angle — the batted-ball inputs</dt>
+<dd><strong>Exit velocity</strong> is how fast the ball leaves the bat (mph);
+<strong>hard-hit %</strong> is the share of batted balls hit at 95 mph or more — a proxy
+for raw contact quality. <strong>Launch angle</strong> is the vertical angle off the
+bat: too low is a grounder, too high is a pop-up, and the productive line-drive window
+sits in between. Together these are the ingredients xwOBA is built from.</dd>
+
+<dt>PA / IP — sample size</dt>
+<dd><strong>Plate appearances</strong> (hitters) and <strong>innings pitched</strong>
+(pitchers). They aren't performance stats — they tell you how much to trust the rest.
+Early in the season small samples swing wildly, so a gaudy line on 30 PA means far
+less than the same line on 300.</dd>
+</dl>
+:::
+
 ## Who's hot, who's not
 
 **Hard contact vs results.** Does hitting the ball hard translate into production?
@@ -130,6 +181,47 @@ pitching |>
   dplyr::arrange(`ERA − xERA`) |>
   knitr::kable(row.names = FALSE)
 ```
+
+## Player pages on Baseball Savant
+
+Want the pitch-by-pitch Statcast detail behind these numbers? Each player links to
+their [Baseball Savant](https://baseballsavant.mlb.com) page.
+
+```{r savant-helper, include=FALSE}
+# Emit a markdown bullet list of Savant links for a data frame that has
+# `player` + `mlbam_id`. Players without an id are skipped.
+savant_bullets <- function(df, kind) {
+  if (!"mlbam_id" %in% names(df)) return(invisible())
+  urls <- savant_url(df$player, df$mlbam_id, kind)
+  ok   <- !is.na(urls)
+  cat(paste0("- [", df$player[ok], "](", urls[ok], ")"), sep = "\n")
+  cat("\n")
+}
+```
+
+::: {layout-ncol="2"}
+
+::: {.savant-list}
+### Hitters
+
+```{r savant-hitters, results='asis'}
+batting |>
+  dplyr::arrange(dplyr::desc(pa)) |>
+  savant_bullets("hitting")
+```
+:::
+
+::: {.savant-list}
+### Pitchers
+
+```{r savant-pitchers, results='asis'}
+pitching |>
+  dplyr::arrange(dplyr::desc(ip)) |>
+  savant_bullets("pitching")
+```
+:::
+
+:::
 
 ---
 

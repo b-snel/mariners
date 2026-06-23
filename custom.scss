@@ -52,3 +52,60 @@ a:hover {
 table {
   font-variant-numeric: tabular-nums;
 }
+
+// Stat glossary — a bordered card defining every stat the page uses.
+.stat-glossary {
+  background: $cream;
+  border: 1px solid $silver;
+  border-radius: 12px;
+  padding: 1rem 1.25rem 0.5rem;
+  margin: 1rem 0 2rem;
+
+  dl {
+    margin-bottom: 0;
+  }
+
+  dt {
+    font-weight: 700;
+    color: $navy;
+    margin-top: 0.75rem;
+  }
+
+  dd {
+    margin: 0.15rem 0 0.5rem;
+    color: #333;
+  }
+}
+
+// Baseball Savant link lists — two side-by-side cards (hitters / pitchers).
+.savant-list {
+  background: $cream;
+  border: 1px solid $silver;
+  border-radius: 12px;
+  padding: 0.75rem 1.1rem;
+
+  h3 {
+    margin-top: 0.25rem;
+    border-bottom: 1px solid $silver;
+    padding-bottom: 0.3rem;
+  }
+
+  ul {
+    margin-bottom: 0.25rem;
+    columns: 2;
+  }
+
+  li {
+    break-inside: avoid;
+  }
+
+  a {
+    color: $teal;
+  }
+}
+
+@media (max-width: 600px) {
+  .savant-list ul {
+    columns: 1;
+  }
+}

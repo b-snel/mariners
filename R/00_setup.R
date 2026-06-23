@@ -42,3 +42,34 @@ mariners_palette <- c(
   silver = "#C4CED4",
   cream  = "#EEF4F7"
 )
+
+# ---- Baseball Savant player links ---------------------------------------
+#
+# Savant player URLs look like
+#   /savant-player/cal-raleigh-663728?stats=statcast-r-hitting-mlb
+# The trailing MLBAM id is what actually resolves the page; the leading name
+# slug is cosmetic, so an approximate slug still lands on the right player.
+
+# Turn "Julio Rodríguez" -> "julio-rodriguez", "J.P. Crawford" -> "jp-crawford".
+savant_slug <- function(name) {
+  s <- iconv(name, to = "ASCII//TRANSLIT")        # strip accents
+  s[is.na(s)] <- name[is.na(s)]                    # fall back if iconv failed
+  s <- tolower(s)
+  s <- gsub("[.'']", "", s)                        # drop periods / apostrophes
+  s <- gsub("[^a-z0-9]+", "-", s)                  # everything else -> hyphen
+  gsub("^-+|-+$", "", s)                           # trim stray hyphens
+}
+
+# Build a full Savant player URL. Returns NA when the id is missing so callers
+# can skip players we can't link.
+savant_url <- function(name, id, kind = c("hitting", "pitching")) {
+  kind <- match.arg(kind)
+  ifelse(
+    is.na(id) | is.na(name),
+    NA_character_,
+    sprintf(
+      "https://baseballsavant.mlb.com/savant-player/%s-%s?stats=statcast-r-%s-mlb",
+      savant_slug(name), id, kind
+    )
+  )
+}
