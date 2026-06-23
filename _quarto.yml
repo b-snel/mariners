@@ -9,6 +9,7 @@ project:
 
 website:
   title: "Mariners 2026"
+  favicon: favicon.ico
   description: >-
     Auto-refreshing Seattle Mariners 2026 stats, analysed with the
     visualisations you'd reach for in a bioinformatics workflow.
