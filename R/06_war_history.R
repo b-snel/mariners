@@ -8,11 +8,11 @@
 #         data/war_source.txt   — "live" | "synthetic" | "unavailable"
 #
 # Sources, in order of preference:
-#   live        — FanGraphs game logs per player; real game-by-game WAR,
-#                 cumulated by date. Requires the FanGraphs player id (fg_id)
-#                 that 01_fetch_data.R carries through from the leaderboards.
+#   live        — FanGraphs date-range leaderboards sampled at weekly cutoffs.
+#                 WAR is cumulative, so [season start, cutoff] gives each
+#                 player's season-to-date WAR as of that cutoff.
 #   synthetic   — a deterministic per-player daily path (offline / demo).
-#   unavailable — the public feed was live but no game-log history could be
+#   unavailable — the public feed was live but no leaderboard history could be
 #                 fetched. We deliberately do NOT invent a daily path for real
 #                 players, so the page says "warming up" instead of charting
 #                 fabricated trends.
@@ -22,58 +22,80 @@ source(here::here("R", "00_setup.R"))
 # MLB regular seasons open in the last week of March.
 SEASON_START <- as.Date(paste0(SEASON, "-03-26"))
 
-# ---- Live: cumulative WAR from FanGraphs game logs ----------------------
+# ---- Live: cumulative WAR from FanGraphs date-range leaderboards ---------
 #
-# Returns a long data frame (player, date, war [cumulative], type) or NULL if
-# nothing usable came back. Every player fetch is isolated so one bad id can't
-# sink the whole series.
-try_fetch_war_history <- function(roster, kind = c("batting", "pitching")) {
-  kind <- match.arg(kind)
-  if (is.null(roster) || !nrow(roster) || !"fg_id" %in% names(roster)) return(NULL)
-
-  game_logs <- if (kind == "batting") {
-    baseballr::fg_batter_game_logs
+# FanGraphs game logs do NOT carry per-game WAR, but the leaderboards do, and
+# they accept a custom date range (startdate/enddate, with month="1000" to
+# switch FanGraphs into date-range mode). Because WAR is cumulative, the
+# leaderboard for [season start, cutoff] is each player's season-to-date WAR
+# as of that cutoff. So we sample weekly cutoffs and stack them — one pair of
+# calls per cutoff (not per player), joined by name like the Statcast join in
+# 01_fetch_data.R. Returns long data (player, date, war, type) or NULL.
+try_fetch_war_history <- function(team_abbr = MARINERS_ABBR) {
+  last <- Sys.Date()
+  cutoffs <- if (last <= SEASON_START + 6) {
+    last
   } else {
-    baseballr::fg_pitcher_game_logs
+    seq(SEASON_START + 6, last, by = "7 days")
   }
-  type_label <- if (kind == "batting") "Hitter" else "Pitcher"
+  if (utils::tail(cutoffs, 1) != last) cutoffs <- c(cutoffs, last)
 
-  rows <- list()
-  for (i in seq_len(nrow(roster))) {
-    id   <- roster$fg_id[i]
-    name <- roster$player[i]
-    if (is.na(id) || is.na(name)) next
-
+  fetch_one <- function(cutoff, kind) {
+    leaders <- if (kind == "batting") {
+      baseballr::fg_batter_leaders
+    } else {
+      baseballr::fg_pitcher_leaders
+    }
     df <- tryCatch(
-      game_logs(playerid = id, year = SEASON),
-      error = function(e) NULL
+      leaders(
+        startseason = as.character(SEASON),
+        endseason   = as.character(SEASON),
+        startdate   = format(SEASON_START, "%Y-%m-%d"),
+        enddate     = format(cutoff, "%Y-%m-%d"),
+        month       = "1000",          # FanGraphs code for a custom date range
+        qual        = "0",
+        ind         = "0"
+      ),
+      error = function(e) {
+        message("  WAR ", kind, " @ ", cutoff, " failed: ", conditionMessage(e))
+        NULL
+      }
     )
-    if (is.null(df) || nrow(df) == 0) next
+    if (is.null(df) || nrow(df) == 0) return(NULL)
 
-    date_col <- Find(function(x) x %in% names(df),
-                     c("Date", "date", "game_date", "gamedate"))
+    team_col <- Find(function(x) x %in% names(df), c("Team", "team_name", "team", "Tm"))
+    name_col <- Find(function(x) x %in% names(df), c("Name", "PlayerName"))
     war_col  <- Find(function(x) x %in% names(df), c("WAR", "war"))
-    if (is.null(date_col) || is.null(war_col)) next
+    if (is.null(team_col) || is.null(name_col) || is.null(war_col)) {
+      message("  WAR ", kind, " @ ", cutoff, ": missing team/name/WAR column")
+      return(NULL)
+    }
 
-    d <- data.frame(
-      player   = name,
-      date     = as.Date(df[[date_col]]),
-      war_game = suppressWarnings(as.numeric(df[[war_col]])),
+    df <- df[toupper(as.character(df[[team_col]])) == toupper(team_abbr), , drop = FALSE]
+    if (nrow(df) == 0) return(NULL)
+    data.frame(
+      player = as.character(df[[name_col]]),
+      date   = cutoff,
+      war    = suppressWarnings(as.numeric(df[[war_col]])),
+      type   = if (kind == "batting") "Hitter" else "Pitcher",
       stringsAsFactors = FALSE
     )
-    d <- d[!is.na(d$date), ]
-    if (!nrow(d)) next
-    d <- d[order(d$date), ]
-    d$war_game[is.na(d$war_game)] <- 0
-    d$war <- cumsum(d$war_game)
-
-    rows[[length(rows) + 1]] <- d[, c("player", "date", "war")]
   }
 
-  if (!length(rows)) return(NULL)
-  out <- do.call(rbind, rows)
-  out$type <- type_label
-  out
+  out <- list()
+  for (i in seq_along(cutoffs)) {        # index keeps Date class (a for-loop over a Date vector drops it)
+    out[[length(out) + 1]] <- fetch_one(cutoffs[i], "batting")
+    out[[length(out) + 1]] <- fetch_one(cutoffs[i], "pitching")
+    Sys.sleep(0.4)                       # be gentle with the FanGraphs API
+  }
+
+  res <- do.call(rbind, out)
+  if (is.null(res) || nrow(res) == 0) return(NULL)
+  res <- res[!is.na(res$war), , drop = FALSE]
+  if (nrow(res) == 0) return(NULL)
+  message("  built WAR history: ", nrow(res), " rows over ", length(cutoffs),
+          " cutoffs, ", length(unique(res$player)), " players.")
+  res
 }
 
 # ---- Synthetic: a plausible daily path to each player's season WAR -------
@@ -125,14 +147,9 @@ history    <- NULL
 war_source <- "synthetic"
 
 if (identical(src, "live")) {
-  # Live leaderboards — try to reconstruct real game-by-game history.
-  bh <- if ("fg_id" %in% names(batting)) {
-    try_fetch_war_history(batting[, c("player", "fg_id")], "batting")
-  }
-  ph <- if ("fg_id" %in% names(pitching)) {
-    try_fetch_war_history(pitching[, c("player", "fg_id")], "pitching")
-  }
-  history <- rbind(bh, ph)              # rbind(NULL, x) == x; both NULL -> NULL
+  # Live leaderboards — reconstruct cumulative WAR by date from date-range
+  # leaderboard snapshots.
+  history <- try_fetch_war_history(MARINERS_ABBR)
   war_source <- if (!is.null(history) && nrow(history) > 0) "live" else "unavailable"
 }
 
