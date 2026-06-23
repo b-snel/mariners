@@ -17,9 +17,6 @@ behave like the rest. The same motifs work fine on baseball, and baseball has
 the advantage of being immediately legible — you don't need to know what a
 gene does to recognize a player having a hot month.
 
-This notebook walks through four canonical visualisations against the 2026
-Seattle Mariners:
-
 | Bioinformatics view              | Baseball mapping                                |
 |----------------------------------|-------------------------------------------------|
 | count / expression matrix        | player × stat table                             |
