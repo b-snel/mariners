@@ -5,7 +5,16 @@
 .DS_Store
 *.Rcheck/
 data/*.rds
+data/data_source.txt
 figures/*.png
 figures/*.pdf
 analysis_files/
 analysis.html
+
+# Quarto website build output + Vercel local link (deployed via CI token,
+# never committed — keeps git history clean)
+/_site/
+/.quarto/
+/.vercel/
+*_files/
+deploy-url.txt

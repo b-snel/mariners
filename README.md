@@ -16,6 +16,44 @@ you'd reach for in an RNA-seq or proteomics workflow:
 | `app.R`             | interactive Shiny explorer (wOBA vs xwOBA trends) |
 | `05_export.R`       | copy figures to `/box/coder-demo` and post top player to Slack |
 
+## Live website & auto-refresh
+
+The notebook is published as a Quarto **website** at
+**[mariners.bsnel.com](https://mariners.bsnel.com)**, hosted on Vercel.
+
+Vercel has no R runtime, so it never renders anything itself — it only serves the
+static files in `_site/`. All rendering happens in GitHub Actions
+([`.github/workflows/refresh.yml`](.github/workflows/refresh.yml)):
+
+1. **Game guard** — each morning (UTC cron, after FanGraphs' ~5–6am ET stats load)
+   it asks the MLB Stats API whether the Mariners finished a game the night before.
+   Off-days are skipped.
+2. **Render** — sets up R 4.5.2 + renv + Quarto, fetches the latest stats once, and
+   runs `quarto render` → `_site/`.
+3. **Data guard** — if the live fetch fell back to synthetic data, the deploy is
+   skipped so the public site keeps its last good numbers.
+4. **Deploy** — pushes `_site/` to Vercel via the CLI (`vercel deploy --prebuilt`).
+
+Trigger a refresh by hand anytime from the repo's **Actions → Refresh Mariners
+site → Run workflow** (tick `force` to deploy regardless of the guards), or:
+
+```bash
+gh workflow run "Refresh Mariners site" -f force=true
+```
+
+> **Why "morning after each game" and not real-time?** The stats come from
+> FanGraphs *season leaderboards*, which only refresh overnight (~5–6am ET). A
+> render fired at the final out would just republish stale aggregates. For true
+> post-game updates the data source would need to move to MLB Stats API live
+> boxscores.
+
+### One-time setup (Vercel + domain)
+
+See [`docs/DEPLOY.md`](docs/DEPLOY.md) for the exact steps: create the Vercel
+project, add the `VERCEL_TOKEN` / `VERCEL_ORG_ID` / `VERCEL_PROJECT_ID` GitHub
+secrets, add the `mariners.bsnel.com` domain in Vercel, and add the CNAME record at
+GoDaddy. No domain transfer or nameserver change is needed.
+
 ## Quick start
 
 1. Open this folder in **Positron** (`File → Open Folder…`).

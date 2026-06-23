@@ -1,0 +1,54 @@
+/*-- scss:defaults --*/
+
+// Mariners palette (matches R/00_setup.R)
+$navy:   #0C2C56;
+$teal:   #005C5C;
+$silver: #C4CED4;
+$cream:  #EEF4F7;
+
+$primary:    $navy;
+$link-color: $teal;
+$body-bg:    #ffffff;
+
+// Slightly larger, calmer headings
+$h1-font-size: 2.2rem;
+$h2-font-size: 1.5rem;
+
+/*-- scss:rules --*/
+
+.navbar-title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+h1, h2, h3 {
+  color: $navy;
+}
+
+h2 {
+  border-bottom: 2px solid $silver;
+  padding-bottom: 0.25rem;
+  margin-top: 2rem;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+// "Last refreshed" pill on the landing page
+.refreshed-badge {
+  display: inline-block;
+  background: $cream;
+  border: 1px solid $silver;
+  border-radius: 999px;
+  padding: 0.35rem 0.95rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $teal;
+  margin: 0.25rem 0 1rem;
+}
+
+// Tighten the season-at-a-glance tables
+table {
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,46 @@
+project:
+  type: website
+  output-dir: _site
+  # Run every document from the project root so here() and getwd() agree.
+  execute-dir: project
+  render:
+    - index.qmd
+    - analysis.qmd
+
+website:
+  title: "Mariners 2026"
+  description: >-
+    Auto-refreshing Seattle Mariners 2026 stats, analysed with the
+    visualisations you'd reach for in a bioinformatics workflow.
+  navbar:
+    background: "#0C2C56"
+    foreground: "#C4CED4"
+    left:
+      - href: index.qmd
+        text: Home
+      - href: analysis.qmd
+        text: Full analysis
+    right:
+      - icon: github
+        href: https://github.com/b-snel/mariners
+        aria-label: Source on GitHub
+  page-footer:
+    border: true
+    left: "Data via FanGraphs & the MLB Stats API · refreshed the morning after each game."
+    right: "Built with Quarto · deployed on Vercel."
+
+format:
+  html:
+    theme:
+      - cosmo
+      - custom.scss
+    toc: true
+    toc-depth: 2
+    code-fold: show
+    code-tools: true
+    embed-resources: false
+
+execute:
+  warning: false
+  message: false
+  freeze: false

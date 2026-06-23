@@ -333,8 +333,24 @@ message("Fetching 2026 Mariners pitching ...")
 pitching_raw <- try_fetch_pitching(SEASON, MARINERS_ABBR)
 pitching     <- if (is.null(pitching_raw)) synth_pitching() else normalize_pitching(pitching_raw)
 
+# FanGraphs/baseballr can return data.table-backed frames whose `[` dispatch
+# breaks head()/tail()/select() downstream — coerce to plain tibbles so every
+# consumer (the notebook, the landing page, the figure scripts) behaves the same.
+batting  <- tibble::as_tibble(batting)
+pitching <- tibble::as_tibble(pitching)
+
 saveRDS(batting,  here("data", "batting_2026.rds"))
 saveRDS(pitching, here("data", "pitching_2026.rds"))
 
 message("Wrote ", nrow(batting), " batter rows and ",
         nrow(pitching), " pitcher rows to data/.")
+
+# Record whether the public-facing batting data came from the live API or the
+# synthetic fallback. The deploy pipeline reads this and refuses to publish
+# synthetic numbers to the public site (see .github/workflows/refresh.yml).
+data_source <- if (is.null(batting_raw)) "synthetic" else "live"
+writeLines(
+  c(data_source, format(Sys.time(), tz = "UTC", "%Y-%m-%dT%H:%M:%SZ")),
+  here("data", "data_source.txt")
+)
+message("Data source: ", data_source)

@@ -1,19 +1,13 @@
 ---
-title: "Mariners 2026 — A Differential Analysis"
-subtitle: "Coder + Positron demo, by way of baseball"
-author: "Benaroya Bioinformatics"
+title: "Mariners — A Differential Analysis"
+subtitle: "Bioinformatics, by way of baseball"
+author: "B. Snel"
 date: today
-format:
-  html:
-    toc: true
-    toc-depth: 2
-    code-fold: show
-    embed-resources: true
-    theme: cosmo
-execute:
-  warning: false
-  message: false
 ---
+
+<!-- Page format (theme, toc, code-fold) is inherited from _quarto.yml so the
+     whole site stays consistent. -->
+
 
 ## The pitch
 
@@ -49,8 +43,12 @@ source(here::here("R", "00_setup.R"))
 
 ```{r fetch}
 # Pull the latest Mariners batting and pitching numbers from the MLB Stats API
-# (or from a saved backup if we're offline — see the note below)
-source(here::here("R", "01_fetch_data.R"))
+# (or from a saved backup if we're offline — see the note below).
+# In the deploy pipeline the data is fetched once before rendering, so only
+# fetch here if the saved files are missing (e.g. a standalone render in Positron).
+if (!file.exists(here("data", "batting_2026.rds"))) {
+  source(here::here("R", "01_fetch_data.R"))
+}
 
 # Read the saved data files into memory
 batting  <- readRDS(here("data", "batting_2026.rds"))
@@ -72,8 +70,11 @@ doesn't need a live database connection.
 # Build the heatmap: each column is a player, each row is an offensive stat
 # Colors show how far above or below average each player is for that stat
 # Players with similar hitting profiles get grouped together automatically (the tree on top)
+# Skip the script's PNG write (its dev.off() would break knitr's figure capture),
+# then build the heatmap silently and grid.draw its gtable on knitr's device.
+options(mariners.skip_png = TRUE)
 source(here::here("R", "02_heatmap.R"))
-knitr::include_graphics(here("figures", "02_heatmap.png"))
+grid::grid.draw(draw_heatmap(silent = TRUE)$gtable)
 ```
 
 Read this exactly like an expression heatmap: columns are samples (players),
@@ -96,7 +97,7 @@ on a cohort — players with similar offensive profiles end up adjacent.
 # gaps have the most statistical backing behind them.
 
 source(here::here("R", "03_volcano.R"))
-knitr::include_graphics(here("figures", "03_volcano.png"))
+p   # the volcano ggplot built by the script, drawn inline
 ```
 
 The x-axis is **effect size**: observed wOBA minus the Statcast expected
@@ -141,7 +142,7 @@ those gates are the season's "differentially expressed" hitters.
 # Connor Joe (top center) — contact-first, doesn't strike out, but not much power either
 
 source(here::here("R", "04_pca.R"))
-knitr::include_graphics(here("figures", "04_pca.png"))
+p   # the PCA biplot built by the script, drawn inline
 ```
 
 Same biplot you'd produce from `prcomp()` on a count matrix: the player
