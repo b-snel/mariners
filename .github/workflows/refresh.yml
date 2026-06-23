@@ -5,6 +5,16 @@ name: Refresh Mariners site
 # serves the static output in _site/.
 
 on:
+  # Code / content changes to the site: render and deploy them right away
+  # instead of waiting for the next morning's game-gated refresh. The fetch
+  # still runs, so a push publishes the latest live stats too; if the fetch
+  # falls back to synthetic, the live-data guard below skips the deploy.
+  push:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "**/*.md"
+      - ".gitignore"
   schedule:
     # Times are UTC. FanGraphs season leaderboards finish loading ~5–6am ET,
     # so we render after that. Offset minute :17 avoids top-of-hour cron delays.
@@ -44,8 +54,11 @@ jobs:
         id: gameguard
         run: |
           set -euo pipefail
-          if [ "${{ inputs.force }}" = "true" ]; then
-            echo "force=true → skipping game check"
+          # A push (deliberate code/content change) or a forced dispatch always
+          # renders — there may be no game in the window, but we still want the
+          # change built and (if data is live) deployed.
+          if [ "${{ inputs.force }}" = "true" ] || [ "${{ github.event_name }}" = "push" ]; then
+            echo "${{ github.event_name }}/force → skipping game check"
             echo "had_game=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
