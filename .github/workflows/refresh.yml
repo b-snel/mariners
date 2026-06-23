@@ -5,9 +5,6 @@ name: Refresh Mariners site
 # serves the static output in _site/.
 
 on:
-  # TEMP: verify the render pipeline on this branch before merge. Remove after.
-  push:
-    branches: [website-vercel-deploy]
   schedule:
     # Times are UTC. FanGraphs season leaderboards finish loading ~5–6am ET,
     # so we render after that. Offset minute :17 avoids top-of-hour cron delays.
@@ -47,7 +44,7 @@ jobs:
         id: gameguard
         run: |
           set -euo pipefail
-          if [ "${{ inputs.force }}" = "true" ] || [ "${{ github.event_name }}" = "push" ]; then
+          if [ "${{ inputs.force }}" = "true" ]; then
             echo "force=true → skipping game check"
             echo "had_game=true" >> "$GITHUB_OUTPUT"
             exit 0
