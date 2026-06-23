@@ -1,6 +1,11 @@
 project:
   type: website
   output-dir: _site
+  # Run every document from the project root so here()-written figures and the
+  # relative paths that embed them agree, and copy the generated PNGs into _site/.
+  execute-dir: project
+  resources:
+    - figures/*.png
   render:
     - index.qmd
     - analysis.qmd
