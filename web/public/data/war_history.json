@@ -1,0 +1,2582 @@
+[
+  {
+    "player": "Brendan Donovan",
+    "date": "2026-04-01",
+    "war": 0.5729,
+    "type": "Hitter"
+  },
+  {
+    "player": "Dominic Canzone",
+    "date": "2026-04-01",
+    "war": 0.3072,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Young",
+    "date": "2026-04-01",
+    "war": 0.2514,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luke Raley",
+    "date": "2026-04-01",
+    "war": 0.2341,
+    "type": "Hitter"
+  },
+  {
+    "player": "Randy Arozarena",
+    "date": "2026-04-01",
+    "war": 0.2092,
+    "type": "Hitter"
+  },
+  {
+    "player": "Mitch Garver",
+    "date": "2026-04-01",
+    "war": 0.0261,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luis Castillo",
+    "date": "2026-04-01",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Gabe Speier",
+    "date": "2026-04-01",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Andrés Muñoz",
+    "date": "2026-04-01",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Eduard Bazardo",
+    "date": "2026-04-01",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Logan Gilbert",
+    "date": "2026-04-01",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "José A. Ferrer",
+    "date": "2026-04-01",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cooper Criswell",
+    "date": "2026-04-01",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "George Kirby",
+    "date": "2026-04-01",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Matt Brash",
+    "date": "2026-04-01",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Casey Legumina",
+    "date": "2026-04-01",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Emerson Hancock",
+    "date": "2026-04-01",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Wilcox",
+    "date": "2026-04-01",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryan Woo",
+    "date": "2026-04-01",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Victor Robles",
+    "date": "2026-04-01",
+    "war": -0.0137,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cal Raleigh",
+    "date": "2026-04-01",
+    "war": -0.0178,
+    "type": "Hitter"
+  },
+  {
+    "player": "Leo Rivas",
+    "date": "2026-04-01",
+    "war": -0.0352,
+    "type": "Hitter"
+  },
+  {
+    "player": "Ryan Bliss",
+    "date": "2026-04-01",
+    "war": -0.0438,
+    "type": "Hitter"
+  },
+  {
+    "player": "Rob Refsnyder",
+    "date": "2026-04-01",
+    "war": -0.2017,
+    "type": "Hitter"
+  },
+  {
+    "player": "Julio Rodríguez",
+    "date": "2026-04-01",
+    "war": -0.2965,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Naylor",
+    "date": "2026-04-01",
+    "war": -0.5442,
+    "type": "Hitter"
+  },
+  {
+    "player": "Brendan Donovan",
+    "date": "2026-04-08",
+    "war": 0.5046,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Young",
+    "date": "2026-04-08",
+    "war": 0.3308,
+    "type": "Hitter"
+  },
+  {
+    "player": "Randy Arozarena",
+    "date": "2026-04-08",
+    "war": 0.2959,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luke Raley",
+    "date": "2026-04-08",
+    "war": 0.1087,
+    "type": "Hitter"
+  },
+  {
+    "player": "Dominic Canzone",
+    "date": "2026-04-08",
+    "war": 0.0627,
+    "type": "Hitter"
+  },
+  {
+    "player": "Mitch Garver",
+    "date": "2026-04-08",
+    "war": 0.0023,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luis Castillo",
+    "date": "2026-04-08",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Gabe Speier",
+    "date": "2026-04-08",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Andrés Muñoz",
+    "date": "2026-04-08",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Eduard Bazardo",
+    "date": "2026-04-08",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Logan Gilbert",
+    "date": "2026-04-08",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "José A. Ferrer",
+    "date": "2026-04-08",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cooper Criswell",
+    "date": "2026-04-08",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "George Kirby",
+    "date": "2026-04-08",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Matt Brash",
+    "date": "2026-04-08",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Casey Legumina",
+    "date": "2026-04-08",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Emerson Hancock",
+    "date": "2026-04-08",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Wilcox",
+    "date": "2026-04-08",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryan Woo",
+    "date": "2026-04-08",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Victor Robles",
+    "date": "2026-04-08",
+    "war": -0.0041,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cal Raleigh",
+    "date": "2026-04-08",
+    "war": -0.0137,
+    "type": "Hitter"
+  },
+  {
+    "player": "Ryan Bliss",
+    "date": "2026-04-08",
+    "war": -0.0438,
+    "type": "Hitter"
+  },
+  {
+    "player": "Leo Rivas",
+    "date": "2026-04-08",
+    "war": -0.0708,
+    "type": "Hitter"
+  },
+  {
+    "player": "Connor Joe",
+    "date": "2026-04-08",
+    "war": -0.0817,
+    "type": "Hitter"
+  },
+  {
+    "player": "J.P. Crawford",
+    "date": "2026-04-08",
+    "war": -0.1211,
+    "type": "Hitter"
+  },
+  {
+    "player": "Rob Refsnyder",
+    "date": "2026-04-08",
+    "war": -0.283,
+    "type": "Hitter"
+  },
+  {
+    "player": "Julio Rodríguez",
+    "date": "2026-04-08",
+    "war": -0.4233,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Naylor",
+    "date": "2026-04-08",
+    "war": -0.7332,
+    "type": "Hitter"
+  },
+  {
+    "player": "Randy Arozarena",
+    "date": "2026-04-15",
+    "war": 0.7319,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luke Raley",
+    "date": "2026-04-15",
+    "war": 0.6715,
+    "type": "Hitter"
+  },
+  {
+    "player": "Brendan Donovan",
+    "date": "2026-04-15",
+    "war": 0.6143,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Young",
+    "date": "2026-04-15",
+    "war": 0.2516,
+    "type": "Hitter"
+  },
+  {
+    "player": "J.P. Crawford",
+    "date": "2026-04-15",
+    "war": 0.121,
+    "type": "Hitter"
+  },
+  {
+    "player": "Leo Rivas",
+    "date": "2026-04-15",
+    "war": 0.1199,
+    "type": "Hitter"
+  },
+  {
+    "player": "Dominic Canzone",
+    "date": "2026-04-15",
+    "war": 0.1046,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cal Raleigh",
+    "date": "2026-04-15",
+    "war": 0.0441,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luis Castillo",
+    "date": "2026-04-15",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Gabe Speier",
+    "date": "2026-04-15",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Andrés Muñoz",
+    "date": "2026-04-15",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Eduard Bazardo",
+    "date": "2026-04-15",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Logan Gilbert",
+    "date": "2026-04-15",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "José A. Ferrer",
+    "date": "2026-04-15",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cooper Criswell",
+    "date": "2026-04-15",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "George Kirby",
+    "date": "2026-04-15",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Matt Brash",
+    "date": "2026-04-15",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Casey Legumina",
+    "date": "2026-04-15",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Emerson Hancock",
+    "date": "2026-04-15",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Wilcox",
+    "date": "2026-04-15",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryan Woo",
+    "date": "2026-04-15",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Victor Robles",
+    "date": "2026-04-15",
+    "war": -0.0041,
+    "type": "Hitter"
+  },
+  {
+    "player": "Mitch Garver",
+    "date": "2026-04-15",
+    "war": -0.0127,
+    "type": "Hitter"
+  },
+  {
+    "player": "Patrick Wisdom",
+    "date": "2026-04-15",
+    "war": -0.024,
+    "type": "Hitter"
+  },
+  {
+    "player": "Ryan Bliss",
+    "date": "2026-04-15",
+    "war": -0.0438,
+    "type": "Hitter"
+  },
+  {
+    "player": "Connor Joe",
+    "date": "2026-04-15",
+    "war": -0.0817,
+    "type": "Hitter"
+  },
+  {
+    "player": "Julio Rodríguez",
+    "date": "2026-04-15",
+    "war": -0.1053,
+    "type": "Hitter"
+  },
+  {
+    "player": "Rob Refsnyder",
+    "date": "2026-04-15",
+    "war": -0.3082,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Naylor",
+    "date": "2026-04-15",
+    "war": -0.7361,
+    "type": "Hitter"
+  },
+  {
+    "player": "Randy Arozarena",
+    "date": "2026-04-22",
+    "war": 0.8371,
+    "type": "Hitter"
+  },
+  {
+    "player": "Brendan Donovan",
+    "date": "2026-04-22",
+    "war": 0.67,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cal Raleigh",
+    "date": "2026-04-22",
+    "war": 0.6205,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luke Raley",
+    "date": "2026-04-22",
+    "war": 0.5798,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Young",
+    "date": "2026-04-22",
+    "war": 0.3226,
+    "type": "Hitter"
+  },
+  {
+    "player": "Dominic Canzone",
+    "date": "2026-04-22",
+    "war": 0.29,
+    "type": "Hitter"
+  },
+  {
+    "player": "Julio Rodríguez",
+    "date": "2026-04-22",
+    "war": 0.2018,
+    "type": "Hitter"
+  },
+  {
+    "player": "J.P. Crawford",
+    "date": "2026-04-22",
+    "war": 0.1156,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luis Castillo",
+    "date": "2026-04-22",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Gabe Speier",
+    "date": "2026-04-22",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Andrés Muñoz",
+    "date": "2026-04-22",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Eduard Bazardo",
+    "date": "2026-04-22",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Logan Gilbert",
+    "date": "2026-04-22",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "José A. Ferrer",
+    "date": "2026-04-22",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cooper Criswell",
+    "date": "2026-04-22",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "George Kirby",
+    "date": "2026-04-22",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Matt Brash",
+    "date": "2026-04-22",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Casey Legumina",
+    "date": "2026-04-22",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Emerson Hancock",
+    "date": "2026-04-22",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Wilcox",
+    "date": "2026-04-22",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryan Woo",
+    "date": "2026-04-22",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Victor Robles",
+    "date": "2026-04-22",
+    "war": -0.0041,
+    "type": "Hitter"
+  },
+  {
+    "player": "Patrick Wisdom",
+    "date": "2026-04-22",
+    "war": -0.024,
+    "type": "Hitter"
+  },
+  {
+    "player": "Ryan Bliss",
+    "date": "2026-04-22",
+    "war": -0.0438,
+    "type": "Hitter"
+  },
+  {
+    "player": "Leo Rivas",
+    "date": "2026-04-22",
+    "war": -0.0627,
+    "type": "Hitter"
+  },
+  {
+    "player": "Mitch Garver",
+    "date": "2026-04-22",
+    "war": -0.0861,
+    "type": "Hitter"
+  },
+  {
+    "player": "Connor Joe",
+    "date": "2026-04-22",
+    "war": -0.0951,
+    "type": "Hitter"
+  },
+  {
+    "player": "Rob Refsnyder",
+    "date": "2026-04-22",
+    "war": -0.3947,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Naylor",
+    "date": "2026-04-22",
+    "war": -0.4382,
+    "type": "Hitter"
+  },
+  {
+    "player": "Randy Arozarena",
+    "date": "2026-04-29",
+    "war": 1.0458,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Young",
+    "date": "2026-04-29",
+    "war": 0.8569,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cal Raleigh",
+    "date": "2026-04-29",
+    "war": 0.7011,
+    "type": "Hitter"
+  },
+  {
+    "player": "Brendan Donovan",
+    "date": "2026-04-29",
+    "war": 0.67,
+    "type": "Hitter"
+  },
+  {
+    "player": "Dominic Canzone",
+    "date": "2026-04-29",
+    "war": 0.399,
+    "type": "Hitter"
+  },
+  {
+    "player": "Julio Rodríguez",
+    "date": "2026-04-29",
+    "war": 0.3685,
+    "type": "Hitter"
+  },
+  {
+    "player": "J.P. Crawford",
+    "date": "2026-04-29",
+    "war": 0.3021,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luke Raley",
+    "date": "2026-04-29",
+    "war": 0.2307,
+    "type": "Hitter"
+  },
+  {
+    "player": "Will Wilson",
+    "date": "2026-04-29",
+    "war": 0.1037,
+    "type": "Hitter"
+  },
+  {
+    "player": "Mitch Garver",
+    "date": "2026-04-29",
+    "war": 0.0396,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luis Castillo",
+    "date": "2026-04-29",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Gabe Speier",
+    "date": "2026-04-29",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Andrés Muñoz",
+    "date": "2026-04-29",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Eduard Bazardo",
+    "date": "2026-04-29",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Logan Gilbert",
+    "date": "2026-04-29",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "José A. Ferrer",
+    "date": "2026-04-29",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cooper Criswell",
+    "date": "2026-04-29",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "George Kirby",
+    "date": "2026-04-29",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Matt Brash",
+    "date": "2026-04-29",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Emerson Hancock",
+    "date": "2026-04-29",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Wilcox",
+    "date": "2026-04-29",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryan Woo",
+    "date": "2026-04-29",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Alex Hoppe",
+    "date": "2026-04-29",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Victor Robles",
+    "date": "2026-04-29",
+    "war": -0.0041,
+    "type": "Hitter"
+  },
+  {
+    "player": "Patrick Wisdom",
+    "date": "2026-04-29",
+    "war": -0.024,
+    "type": "Hitter"
+  },
+  {
+    "player": "Ryan Bliss",
+    "date": "2026-04-29",
+    "war": -0.0438,
+    "type": "Hitter"
+  },
+  {
+    "player": "Connor Joe",
+    "date": "2026-04-29",
+    "war": -0.082,
+    "type": "Hitter"
+  },
+  {
+    "player": "Leo Rivas",
+    "date": "2026-04-29",
+    "war": -0.1382,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Naylor",
+    "date": "2026-04-29",
+    "war": -0.2576,
+    "type": "Hitter"
+  },
+  {
+    "player": "Rob Refsnyder",
+    "date": "2026-04-29",
+    "war": -0.276,
+    "type": "Hitter"
+  },
+  {
+    "player": "Randy Arozarena",
+    "date": "2026-05-06",
+    "war": 0.9044,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Young",
+    "date": "2026-05-06",
+    "war": 0.8573,
+    "type": "Hitter"
+  },
+  {
+    "player": "Julio Rodríguez",
+    "date": "2026-05-06",
+    "war": 0.6966,
+    "type": "Hitter"
+  },
+  {
+    "player": "Brendan Donovan",
+    "date": "2026-05-06",
+    "war": 0.67,
+    "type": "Hitter"
+  },
+  {
+    "player": "J.P. Crawford",
+    "date": "2026-05-06",
+    "war": 0.5204,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cal Raleigh",
+    "date": "2026-05-06",
+    "war": 0.5117,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luke Raley",
+    "date": "2026-05-06",
+    "war": 0.3583,
+    "type": "Hitter"
+  },
+  {
+    "player": "Dominic Canzone",
+    "date": "2026-05-06",
+    "war": 0.3165,
+    "type": "Hitter"
+  },
+  {
+    "player": "Will Wilson",
+    "date": "2026-05-06",
+    "war": 0.1037,
+    "type": "Hitter"
+  },
+  {
+    "player": "Jhonny Pereda",
+    "date": "2026-05-06",
+    "war": 0.0407,
+    "type": "Hitter"
+  },
+  {
+    "player": "Mitch Garver",
+    "date": "2026-05-06",
+    "war": 0.0112,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luis Castillo",
+    "date": "2026-05-06",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Gabe Speier",
+    "date": "2026-05-06",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Andrés Muñoz",
+    "date": "2026-05-06",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Eduard Bazardo",
+    "date": "2026-05-06",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Logan Gilbert",
+    "date": "2026-05-06",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "José A. Ferrer",
+    "date": "2026-05-06",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cooper Criswell",
+    "date": "2026-05-06",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "George Kirby",
+    "date": "2026-05-06",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Matt Brash",
+    "date": "2026-05-06",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Emerson Hancock",
+    "date": "2026-05-06",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Wilcox",
+    "date": "2026-05-06",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Nick Davila",
+    "date": "2026-05-06",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryan Woo",
+    "date": "2026-05-06",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Alex Hoppe",
+    "date": "2026-05-06",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Victor Robles",
+    "date": "2026-05-06",
+    "war": -0.0041,
+    "type": "Hitter"
+  },
+  {
+    "player": "Patrick Wisdom",
+    "date": "2026-05-06",
+    "war": -0.024,
+    "type": "Hitter"
+  },
+  {
+    "player": "Ryan Bliss",
+    "date": "2026-05-06",
+    "war": -0.0438,
+    "type": "Hitter"
+  },
+  {
+    "player": "Connor Joe",
+    "date": "2026-05-06",
+    "war": -0.0992,
+    "type": "Hitter"
+  },
+  {
+    "player": "Leo Rivas",
+    "date": "2026-05-06",
+    "war": -0.1295,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Naylor",
+    "date": "2026-05-06",
+    "war": -0.1408,
+    "type": "Hitter"
+  },
+  {
+    "player": "Rob Refsnyder",
+    "date": "2026-05-06",
+    "war": -0.3545,
+    "type": "Hitter"
+  },
+  {
+    "player": "Randy Arozarena",
+    "date": "2026-05-13",
+    "war": 1.5887,
+    "type": "Hitter"
+  },
+  {
+    "player": "Julio Rodríguez",
+    "date": "2026-05-13",
+    "war": 1.0025,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luke Raley",
+    "date": "2026-05-13",
+    "war": 0.7362,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Young",
+    "date": "2026-05-13",
+    "war": 0.6596,
+    "type": "Hitter"
+  },
+  {
+    "player": "J.P. Crawford",
+    "date": "2026-05-13",
+    "war": 0.544,
+    "type": "Hitter"
+  },
+  {
+    "player": "Brendan Donovan",
+    "date": "2026-05-13",
+    "war": 0.4407,
+    "type": "Hitter"
+  },
+  {
+    "player": "Dominic Canzone",
+    "date": "2026-05-13",
+    "war": 0.3292,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cal Raleigh",
+    "date": "2026-05-13",
+    "war": 0.2781,
+    "type": "Hitter"
+  },
+  {
+    "player": "Will Wilson",
+    "date": "2026-05-13",
+    "war": 0.1037,
+    "type": "Hitter"
+  },
+  {
+    "player": "Jhonny Pereda",
+    "date": "2026-05-13",
+    "war": 0.0407,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Naylor",
+    "date": "2026-05-13",
+    "war": 0.0394,
+    "type": "Hitter"
+  },
+  {
+    "player": "Mitch Garver",
+    "date": "2026-05-13",
+    "war": 0.0154,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luis Castillo",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Gabe Speier",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Andrés Muñoz",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Eduard Bazardo",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Logan Gilbert",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "José A. Ferrer",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cooper Criswell",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Domingo Gonzalez",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "George Kirby",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Matt Brash",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Simpson",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Emerson Hancock",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Wilcox",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Nick Davila",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryce Miller",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryan Woo",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Alex Hoppe",
+    "date": "2026-05-13",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Victor Robles",
+    "date": "2026-05-13",
+    "war": -0.0041,
+    "type": "Hitter"
+  },
+  {
+    "player": "Patrick Wisdom",
+    "date": "2026-05-13",
+    "war": -0.024,
+    "type": "Hitter"
+  },
+  {
+    "player": "Connor Joe",
+    "date": "2026-05-13",
+    "war": -0.0316,
+    "type": "Hitter"
+  },
+  {
+    "player": "Ryan Bliss",
+    "date": "2026-05-13",
+    "war": -0.0438,
+    "type": "Hitter"
+  },
+  {
+    "player": "Leo Rivas",
+    "date": "2026-05-13",
+    "war": -0.1743,
+    "type": "Hitter"
+  },
+  {
+    "player": "Rob Refsnyder",
+    "date": "2026-05-13",
+    "war": -0.4958,
+    "type": "Hitter"
+  },
+  {
+    "player": "Randy Arozarena",
+    "date": "2026-05-20",
+    "war": 1.9288,
+    "type": "Hitter"
+  },
+  {
+    "player": "Julio Rodríguez",
+    "date": "2026-05-20",
+    "war": 0.9769,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luke Raley",
+    "date": "2026-05-20",
+    "war": 0.778,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Young",
+    "date": "2026-05-20",
+    "war": 0.7385,
+    "type": "Hitter"
+  },
+  {
+    "player": "J.P. Crawford",
+    "date": "2026-05-20",
+    "war": 0.6543,
+    "type": "Hitter"
+  },
+  {
+    "player": "Brendan Donovan",
+    "date": "2026-05-20",
+    "war": 0.5768,
+    "type": "Hitter"
+  },
+  {
+    "player": "Dominic Canzone",
+    "date": "2026-05-20",
+    "war": 0.3439,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cal Raleigh",
+    "date": "2026-05-20",
+    "war": 0.2781,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Naylor",
+    "date": "2026-05-20",
+    "war": 0.1512,
+    "type": "Hitter"
+  },
+  {
+    "player": "Jhonny Pereda",
+    "date": "2026-05-20",
+    "war": 0.1053,
+    "type": "Hitter"
+  },
+  {
+    "player": "Will Wilson",
+    "date": "2026-05-20",
+    "war": 0.1037,
+    "type": "Hitter"
+  },
+  {
+    "player": "Colt Emerson",
+    "date": "2026-05-20",
+    "war": 0.052,
+    "type": "Hitter"
+  },
+  {
+    "player": "Mitch Garver",
+    "date": "2026-05-20",
+    "war": 0.0348,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luis Castillo",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Gabe Speier",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Andrés Muñoz",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Eduard Bazardo",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Logan Gilbert",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "José A. Ferrer",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cooper Criswell",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Domingo Gonzalez",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "George Kirby",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Matt Brash",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Simpson",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Emerson Hancock",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Wilcox",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Nick Davila",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryce Miller",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryan Woo",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Alex Hoppe",
+    "date": "2026-05-20",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Victor Robles",
+    "date": "2026-05-20",
+    "war": -0.0041,
+    "type": "Hitter"
+  },
+  {
+    "player": "Ryan Bliss",
+    "date": "2026-05-20",
+    "war": -0.0438,
+    "type": "Hitter"
+  },
+  {
+    "player": "Connor Joe",
+    "date": "2026-05-20",
+    "war": -0.0856,
+    "type": "Hitter"
+  },
+  {
+    "player": "Patrick Wisdom",
+    "date": "2026-05-20",
+    "war": -0.0886,
+    "type": "Hitter"
+  },
+  {
+    "player": "Leo Rivas",
+    "date": "2026-05-20",
+    "war": -0.2176,
+    "type": "Hitter"
+  },
+  {
+    "player": "Rob Refsnyder",
+    "date": "2026-05-20",
+    "war": -0.8487,
+    "type": "Hitter"
+  },
+  {
+    "player": "Randy Arozarena",
+    "date": "2026-05-27",
+    "war": 2.0208,
+    "type": "Hitter"
+  },
+  {
+    "player": "Julio Rodríguez",
+    "date": "2026-05-27",
+    "war": 1.1631,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luke Raley",
+    "date": "2026-05-27",
+    "war": 0.8442,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Young",
+    "date": "2026-05-27",
+    "war": 0.7437,
+    "type": "Hitter"
+  },
+  {
+    "player": "Brendan Donovan",
+    "date": "2026-05-27",
+    "war": 0.5768,
+    "type": "Hitter"
+  },
+  {
+    "player": "J.P. Crawford",
+    "date": "2026-05-27",
+    "war": 0.5419,
+    "type": "Hitter"
+  },
+  {
+    "player": "Colt Emerson",
+    "date": "2026-05-27",
+    "war": 0.3711,
+    "type": "Hitter"
+  },
+  {
+    "player": "Dominic Canzone",
+    "date": "2026-05-27",
+    "war": 0.3228,
+    "type": "Hitter"
+  },
+  {
+    "player": "Mitch Garver",
+    "date": "2026-05-27",
+    "war": 0.3191,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cal Raleigh",
+    "date": "2026-05-27",
+    "war": 0.2781,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Naylor",
+    "date": "2026-05-27",
+    "war": 0.1763,
+    "type": "Hitter"
+  },
+  {
+    "player": "Will Wilson",
+    "date": "2026-05-27",
+    "war": 0.1037,
+    "type": "Hitter"
+  },
+  {
+    "player": "Victor Robles",
+    "date": "2026-05-27",
+    "war": 0.0442,
+    "type": "Hitter"
+  },
+  {
+    "player": "Jhonny Pereda",
+    "date": "2026-05-27",
+    "war": 0.0406,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luis Castillo",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Gabe Speier",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Andrés Muñoz",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Eduard Bazardo",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Logan Gilbert",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "José A. Ferrer",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cooper Criswell",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Domingo Gonzalez",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "George Kirby",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Matt Brash",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Simpson",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Emerson Hancock",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Wilcox",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Nick Davila",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryce Miller",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryan Woo",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Alex Hoppe",
+    "date": "2026-05-27",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Ryan Bliss",
+    "date": "2026-05-27",
+    "war": -0.0438,
+    "type": "Hitter"
+  },
+  {
+    "player": "Connor Joe",
+    "date": "2026-05-27",
+    "war": -0.0856,
+    "type": "Hitter"
+  },
+  {
+    "player": "Patrick Wisdom",
+    "date": "2026-05-27",
+    "war": -0.1848,
+    "type": "Hitter"
+  },
+  {
+    "player": "Leo Rivas",
+    "date": "2026-05-27",
+    "war": -0.2176,
+    "type": "Hitter"
+  },
+  {
+    "player": "Rob Refsnyder",
+    "date": "2026-05-27",
+    "war": -0.7406,
+    "type": "Hitter"
+  },
+  {
+    "player": "Randy Arozarena",
+    "date": "2026-06-03",
+    "war": 1.904,
+    "type": "Hitter"
+  },
+  {
+    "player": "Julio Rodríguez",
+    "date": "2026-06-03",
+    "war": 1.4038,
+    "type": "Hitter"
+  },
+  {
+    "player": "J.P. Crawford",
+    "date": "2026-06-03",
+    "war": 0.9906,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luke Raley",
+    "date": "2026-06-03",
+    "war": 0.9501,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Young",
+    "date": "2026-06-03",
+    "war": 0.9063,
+    "type": "Hitter"
+  },
+  {
+    "player": "Dominic Canzone",
+    "date": "2026-06-03",
+    "war": 0.7438,
+    "type": "Hitter"
+  },
+  {
+    "player": "Colt Emerson",
+    "date": "2026-06-03",
+    "war": 0.5796,
+    "type": "Hitter"
+  },
+  {
+    "player": "Brendan Donovan",
+    "date": "2026-06-03",
+    "war": 0.5768,
+    "type": "Hitter"
+  },
+  {
+    "player": "Jhonny Pereda",
+    "date": "2026-06-03",
+    "war": 0.3365,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cal Raleigh",
+    "date": "2026-06-03",
+    "war": 0.2781,
+    "type": "Hitter"
+  },
+  {
+    "player": "Mitch Garver",
+    "date": "2026-06-03",
+    "war": 0.1876,
+    "type": "Hitter"
+  },
+  {
+    "player": "Will Wilson",
+    "date": "2026-06-03",
+    "war": 0.1037,
+    "type": "Hitter"
+  },
+  {
+    "player": "Victor Robles",
+    "date": "2026-06-03",
+    "war": 0.0748,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Naylor",
+    "date": "2026-06-03",
+    "war": 0.0219,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luis Castillo",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Gabe Speier",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Andrés Muñoz",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Eduard Bazardo",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Logan Gilbert",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "José A. Ferrer",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cooper Criswell",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Domingo Gonzalez",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "George Kirby",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Matt Brash",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Simpson",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Emerson Hancock",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Wilcox",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Nick Davila",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryce Miller",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryan Woo",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Alex Hoppe",
+    "date": "2026-06-03",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Ryan Bliss",
+    "date": "2026-06-03",
+    "war": -0.0438,
+    "type": "Hitter"
+  },
+  {
+    "player": "Patrick Wisdom",
+    "date": "2026-06-03",
+    "war": -0.055,
+    "type": "Hitter"
+  },
+  {
+    "player": "Connor Joe",
+    "date": "2026-06-03",
+    "war": -0.0856,
+    "type": "Hitter"
+  },
+  {
+    "player": "Leo Rivas",
+    "date": "2026-06-03",
+    "war": -0.2176,
+    "type": "Hitter"
+  },
+  {
+    "player": "Rob Refsnyder",
+    "date": "2026-06-03",
+    "war": -0.8667,
+    "type": "Hitter"
+  },
+  {
+    "player": "Randy Arozarena",
+    "date": "2026-06-10",
+    "war": 2.3395,
+    "type": "Hitter"
+  },
+  {
+    "player": "Julio Rodríguez",
+    "date": "2026-06-10",
+    "war": 1.4249,
+    "type": "Hitter"
+  },
+  {
+    "player": "J.P. Crawford",
+    "date": "2026-06-10",
+    "war": 1.0767,
+    "type": "Hitter"
+  },
+  {
+    "player": "Dominic Canzone",
+    "date": "2026-06-10",
+    "war": 0.9546,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Young",
+    "date": "2026-06-10",
+    "war": 0.8353,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luke Raley",
+    "date": "2026-06-10",
+    "war": 0.7606,
+    "type": "Hitter"
+  },
+  {
+    "player": "Colt Emerson",
+    "date": "2026-06-10",
+    "war": 0.663,
+    "type": "Hitter"
+  },
+  {
+    "player": "Brendan Donovan",
+    "date": "2026-06-10",
+    "war": 0.5768,
+    "type": "Hitter"
+  },
+  {
+    "player": "Jhonny Pereda",
+    "date": "2026-06-10",
+    "war": 0.3761,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Naylor",
+    "date": "2026-06-10",
+    "war": 0.301,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cal Raleigh",
+    "date": "2026-06-10",
+    "war": 0.2781,
+    "type": "Hitter"
+  },
+  {
+    "player": "Mitch Garver",
+    "date": "2026-06-10",
+    "war": 0.2228,
+    "type": "Hitter"
+  },
+  {
+    "player": "Will Wilson",
+    "date": "2026-06-10",
+    "war": 0.1037,
+    "type": "Hitter"
+  },
+  {
+    "player": "Victor Robles",
+    "date": "2026-06-10",
+    "war": 0.0722,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luis Castillo",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Gabe Speier",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Andrés Muñoz",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Eduard Bazardo",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Logan Gilbert",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "José A. Ferrer",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cooper Criswell",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Domingo Gonzalez",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "George Kirby",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Matt Brash",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Simpson",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Emerson Hancock",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Wilcox",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Nick Davila",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryce Miller",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryan Woo",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Alex Hoppe",
+    "date": "2026-06-10",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Miles Mastrobuoni",
+    "date": "2026-06-10",
+    "war": -0.0053,
+    "type": "Hitter"
+  },
+  {
+    "player": "Connor Joe",
+    "date": "2026-06-10",
+    "war": -0.0856,
+    "type": "Hitter"
+  },
+  {
+    "player": "Ryan Bliss",
+    "date": "2026-06-10",
+    "war": -0.0895,
+    "type": "Hitter"
+  },
+  {
+    "player": "Leo Rivas",
+    "date": "2026-06-10",
+    "war": -0.2176,
+    "type": "Hitter"
+  },
+  {
+    "player": "Patrick Wisdom",
+    "date": "2026-06-10",
+    "war": -0.3911,
+    "type": "Hitter"
+  },
+  {
+    "player": "Rob Refsnyder",
+    "date": "2026-06-10",
+    "war": -0.8503,
+    "type": "Hitter"
+  },
+  {
+    "player": "Randy Arozarena",
+    "date": "2026-06-17",
+    "war": 2.3297,
+    "type": "Hitter"
+  },
+  {
+    "player": "Dominic Canzone",
+    "date": "2026-06-17",
+    "war": 1.55,
+    "type": "Hitter"
+  },
+  {
+    "player": "Julio Rodríguez",
+    "date": "2026-06-17",
+    "war": 1.4318,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Young",
+    "date": "2026-06-17",
+    "war": 1.1158,
+    "type": "Hitter"
+  },
+  {
+    "player": "J.P. Crawford",
+    "date": "2026-06-17",
+    "war": 1.0791,
+    "type": "Hitter"
+  },
+  {
+    "player": "Colt Emerson",
+    "date": "2026-06-17",
+    "war": 0.7471,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luke Raley",
+    "date": "2026-06-17",
+    "war": 0.6827,
+    "type": "Hitter"
+  },
+  {
+    "player": "Brendan Donovan",
+    "date": "2026-06-17",
+    "war": 0.5768,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cal Raleigh",
+    "date": "2026-06-17",
+    "war": 0.3857,
+    "type": "Hitter"
+  },
+  {
+    "player": "Jhonny Pereda",
+    "date": "2026-06-17",
+    "war": 0.2912,
+    "type": "Hitter"
+  },
+  {
+    "player": "Mitch Garver",
+    "date": "2026-06-17",
+    "war": 0.2805,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Naylor",
+    "date": "2026-06-17",
+    "war": 0.2115,
+    "type": "Hitter"
+  },
+  {
+    "player": "Will Wilson",
+    "date": "2026-06-17",
+    "war": 0.1037,
+    "type": "Hitter"
+  },
+  {
+    "player": "Victor Robles",
+    "date": "2026-06-17",
+    "war": 0.0252,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luis Castillo",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Gabe Speier",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Michael Rucker",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Andrés Muñoz",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Eduard Bazardo",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Logan Gilbert",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "José A. Ferrer",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cooper Criswell",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Domingo Gonzalez",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "George Kirby",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Matt Brash",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Simpson",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Emerson Hancock",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Wilcox",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Nick Davila",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryce Miller",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryan Woo",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Alex Hoppe",
+    "date": "2026-06-17",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Ryan Bliss",
+    "date": "2026-06-17",
+    "war": -0.0895,
+    "type": "Hitter"
+  },
+  {
+    "player": "Connor Joe",
+    "date": "2026-06-17",
+    "war": -0.1219,
+    "type": "Hitter"
+  },
+  {
+    "player": "Miles Mastrobuoni",
+    "date": "2026-06-17",
+    "war": -0.2017,
+    "type": "Hitter"
+  },
+  {
+    "player": "Leo Rivas",
+    "date": "2026-06-17",
+    "war": -0.2176,
+    "type": "Hitter"
+  },
+  {
+    "player": "Patrick Wisdom",
+    "date": "2026-06-17",
+    "war": -0.4399,
+    "type": "Hitter"
+  },
+  {
+    "player": "Rob Refsnyder",
+    "date": "2026-06-17",
+    "war": -0.8549,
+    "type": "Hitter"
+  },
+  {
+    "player": "Randy Arozarena",
+    "date": "2026-06-23",
+    "war": 2.3297,
+    "type": "Hitter"
+  },
+  {
+    "player": "Julio Rodríguez",
+    "date": "2026-06-23",
+    "war": 1.5002,
+    "type": "Hitter"
+  },
+  {
+    "player": "Dominic Canzone",
+    "date": "2026-06-23",
+    "war": 1.482,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Young",
+    "date": "2026-06-23",
+    "war": 1.115,
+    "type": "Hitter"
+  },
+  {
+    "player": "J.P. Crawford",
+    "date": "2026-06-23",
+    "war": 0.9664,
+    "type": "Hitter"
+  },
+  {
+    "player": "Colt Emerson",
+    "date": "2026-06-23",
+    "war": 0.69,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luke Raley",
+    "date": "2026-06-23",
+    "war": 0.6573,
+    "type": "Hitter"
+  },
+  {
+    "player": "Brendan Donovan",
+    "date": "2026-06-23",
+    "war": 0.5768,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cal Raleigh",
+    "date": "2026-06-23",
+    "war": 0.3827,
+    "type": "Hitter"
+  },
+  {
+    "player": "Jhonny Pereda",
+    "date": "2026-06-23",
+    "war": 0.2912,
+    "type": "Hitter"
+  },
+  {
+    "player": "Mitch Garver",
+    "date": "2026-06-23",
+    "war": 0.1709,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Naylor",
+    "date": "2026-06-23",
+    "war": 0.1234,
+    "type": "Hitter"
+  },
+  {
+    "player": "Will Wilson",
+    "date": "2026-06-23",
+    "war": 0.1037,
+    "type": "Hitter"
+  },
+  {
+    "player": "Luis Castillo",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Gabe Speier",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Michael Rucker",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Andrés Muñoz",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Eduard Bazardo",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Logan Gilbert",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "José A. Ferrer",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cooper Criswell",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Domingo Gonzalez",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "George Kirby",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Matt Brash",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Josh Simpson",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Emerson Hancock",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Cole Wilcox",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Nick Davila",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryce Miller",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Bryan Woo",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Alex Hoppe",
+    "date": "2026-06-23",
+    "war": 0,
+    "type": "Hitter"
+  },
+  {
+    "player": "Victor Robles",
+    "date": "2026-06-23",
+    "war": -0.0705,
+    "type": "Hitter"
+  },
+  {
+    "player": "Ryan Bliss",
+    "date": "2026-06-23",
+    "war": -0.0895,
+    "type": "Hitter"
+  },
+  {
+    "player": "Connor Joe",
+    "date": "2026-06-23",
+    "war": -0.1763,
+    "type": "Hitter"
+  },
+  {
+    "player": "Miles Mastrobuoni",
+    "date": "2026-06-23",
+    "war": -0.2063,
+    "type": "Hitter"
+  },
+  {
+    "player": "Leo Rivas",
+    "date": "2026-06-23",
+    "war": -0.2176,
+    "type": "Hitter"
+  },
+  {
+    "player": "Patrick Wisdom",
+    "date": "2026-06-23",
+    "war": -0.4399,
+    "type": "Hitter"
+  },
+  {
+    "player": "Rob Refsnyder",
+    "date": "2026-06-23",
+    "war": -1.0005,
+    "type": "Hitter"
+  }
+]

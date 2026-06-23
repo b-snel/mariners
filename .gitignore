@@ -6,6 +6,7 @@
 *.Rcheck/
 data/*.rds
 data/data_source.txt
+data/war_source.txt
 figures/*.png
 figures/*.pdf
 analysis_files/

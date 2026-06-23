@@ -1,14 +1,15 @@
 name: Refresh Mariners site
 
-# Re-renders the Quarto site with fresh stats and deploys it to Vercel.
-# Vercel cannot run R/Quarto, so all rendering happens here and Vercel only
-# serves the static output in _site/.
+# Fetches fresh stats with R, exports them to JSON, builds the Next.js + WebGL
+# front end (web/) to a static bundle, and deploys it to Vercel. Vercel runs no
+# R and no build — it only serves the prebuilt static output, exactly as it did
+# for the old Quarto site (we just feed it web/out instead of _site).
 
 on:
-  # Code / content changes to the site: render and deploy them right away
-  # instead of waiting for the next morning's game-gated refresh. The fetch
-  # still runs, so a push publishes the latest live stats too; if the fetch
-  # falls back to synthetic, the live-data guard below skips the deploy.
+  # Code / content changes to the site: build and deploy them right away instead
+  # of waiting for the next morning's game-gated refresh. The fetch still runs,
+  # so a push publishes the latest live stats too; if the fetch falls back to
+  # synthetic, the live-data guard below skips the deploy.
   push:
     branches: [main]
     paths-ignore:
@@ -24,7 +25,7 @@ on:
   workflow_dispatch:
     inputs:
       force:
-        description: "Render and deploy even if no game finished / data is synthetic"
+        description: "Build and deploy even if no game finished / data is synthetic"
         type: boolean
         default: false
 
@@ -56,7 +57,7 @@ jobs:
         run: |
           set -euo pipefail
           # A push (deliberate code/content change) or a forced dispatch always
-          # renders — there may be no game in the window, but we still want the
+          # builds — there may be no game in the window, but we still want the
           # change built and (if data is live) deployed.
           if [ "${{ inputs.force }}" = "true" ] || [ "${{ github.event_name }}" = "push" ]; then
             echo "${{ github.event_name }}/force → skipping game check"
@@ -74,22 +75,19 @@ jobs:
             echo "had_game=true" >> "$GITHUB_OUTPUT"
           else
             echo "had_game=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::No finished Mariners game in the window — skipping render & deploy."
+            echo "::notice::No finished Mariners game in the window — skipping build & deploy."
           fi
 
       # ---- Toolchain (only when there's work to do) --------------------------
-      - name: System libraries for R packages (ragg/svglite/curl/xml2)
+      - name: System libraries for R packages
         if: steps.gameguard.outputs.had_game == 'true'
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends \
             libcurl4-openssl-dev libssl-dev libxml2-dev \
             libfontconfig1-dev libfreetype6-dev libpng-dev \
-            libtiff5-dev libjpeg-dev libharfbuzz-dev libfribidi-dev
-
-      - name: Set up Quarto
-        if: steps.gameguard.outputs.had_game == 'true'
-        uses: quarto-dev/quarto-actions/setup@v2
+            libtiff5-dev libjpeg-dev libharfbuzz-dev libfribidi-dev \
+            libuv1-dev cmake libx11-dev
 
       - name: Set up R
         if: steps.gameguard.outputs.had_game == 'true'
@@ -102,16 +100,19 @@ jobs:
         if: steps.gameguard.outputs.had_game == 'true'
         uses: r-lib/actions/setup-renv@v2
 
-      - name: Set up Node (for Vercel CLI)
+      - name: Set up Node
         if: steps.gameguard.outputs.had_game == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
 
-      # ---- Fetch data once, then render --------------------------------------
-      - name: Fetch latest stats
+      # ---- Fetch data once, export to JSON, then build -----------------------
+      - name: Fetch stats and export JSON
         if: steps.gameguard.outputs.had_game == 'true'
-        run: Rscript -e 'source("R/01_fetch_data.R")'
+        run: |
+          Rscript -e 'source("R/01_fetch_data.R"); source("R/06_war_history.R"); source("R/07_export_json.R")'
 
       - name: Guard 2 — was the data live (not synthetic)?
         id: dataguard
@@ -127,16 +128,19 @@ jobs:
             echo "::warning::Live fetch fell back to synthetic data — deploy will be skipped."
           fi
 
-      - name: Render site
+      - name: Build static site
         if: steps.gameguard.outputs.had_game == 'true'
-        run: quarto render
+        working-directory: web
+        run: |
+          npm ci
+          npm run build      # next build with output:export → web/out
 
-      - name: Upload rendered site artifact
+      - name: Upload built site artifact
         if: steps.gameguard.outputs.had_game == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: site
-          path: _site
+          path: web/out
           if-no-files-found: error
 
       # ---- Deploy to Vercel (prebuilt: Vercel runs no build) -----------------
@@ -148,8 +152,9 @@ jobs:
         run: |
           set -euo pipefail
           npx --yes vercel@latest pull --yes --environment=production --token="$VERCEL_TOKEN"
+          rm -rf .vercel/output
           mkdir -p .vercel/output/static
-          cp -r _site/. .vercel/output/static/
+          cp -r web/out/. .vercel/output/static/
           printf '%s' '{"version":3,"cleanUrls":true,"trailingSlash":false}' > .vercel/output/config.json
           npx --yes vercel@latest deploy --prebuilt --prod --token="$VERCEL_TOKEN" | tee deploy-url.txt
           echo "::notice::Deployed $(tail -n1 deploy-url.txt)"
@@ -161,7 +166,7 @@ jobs:
            (inputs.force != true && steps.dataguard.outputs.had_live_data != 'true'))
         run: |
           if [ -z "${VERCEL_TOKEN}" ]; then
-            echo "::notice::Render succeeded but Vercel secrets are not set yet — deploy skipped. The site artifact above contains the rendered output."
+            echo "::notice::Build succeeded but Vercel secrets are not set yet — deploy skipped. The site artifact above contains the built output."
           else
-            echo "::notice::Render succeeded but data was synthetic and force was not set — deploy skipped so the public site keeps its last good numbers."
+            echo "::notice::Build succeeded but data was synthetic and force was not set — deploy skipped so the public site keeps its last good numbers."
           fi

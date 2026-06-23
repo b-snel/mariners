@@ -1,0 +1,32 @@
+{
+  "name": "mariners-2026-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Animated WebGL front end for the Mariners 2026 stats site. Reads JSON exported by the R pipeline (R/07_export_json.R) and renders it with react-three-fiber.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@react-three/drei": "9.114.3",
+    "@react-three/fiber": "8.17.10",
+    "@react-three/postprocessing": "2.16.3",
+    "framer-motion": "11.11.17",
+    "ml-matrix": "6.12.0",
+    "ml-pca": "4.1.1",
+    "next": "14.2.18",
+    "postprocessing": "6.36.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "three": "0.169.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.9.0",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@types/three": "0.169.0",
+    "typescript": "5.6.3"
+  }
+}

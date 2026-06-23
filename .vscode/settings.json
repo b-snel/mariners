@@ -1,0 +1,8 @@
+{
+  // The Dev Containers extension auto-mounts the host Wayland socket for Linux
+  // GUI apps. On this Docker Desktop + WSL setup that mount fails to resolve
+  // (".../distro-services/ubuntu-24-04.sock: no such file or directory") and
+  // blocks the container from starting. We don't need GUI forwarding — we
+  // render Quarto and view it in a browser — so turn the mount off.
+  "dev.containers.mountWaylandSocket": false
+}

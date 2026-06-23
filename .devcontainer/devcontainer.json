@@ -20,7 +20,7 @@
 
   // System libraries the lockfile's packages need at runtime (mirrors the CI
   // "System libraries" step). rocker/r-ver is minimal, so install them here.
-  "onCreateCommand": "apt-get update -qq && apt-get install -y --no-install-recommends git ca-certificates locales libcurl4-openssl-dev libssl-dev libxml2-dev libfontconfig1-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libharfbuzz-dev libfribidi-dev",
+  "onCreateCommand": "apt-get update -qq && apt-get install -y --no-install-recommends git ca-certificates locales libcurl4-openssl-dev libssl-dev libxml2-dev libfontconfig1-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libharfbuzz-dev libfribidi-dev libuv1-dev cmake libx11-dev pandoc",
 
   // Restore the exact pinned package versions from renv.lock.
   "postCreateCommand": "Rscript -e 'if (!requireNamespace(\"renv\", quietly = TRUE)) install.packages(\"renv\"); renv::restore(prompt = FALSE)'",

@@ -1,0 +1,378 @@
+/* ===========================================================================
+   Mariners 2026 — sci-fi design system
+   Dark, luminous, data-forward. CSS custom properties mirror lib/palette.ts.
+   =========================================================================== */
+
+:root {
+  --bg: #04070d;
+  --bg-2: #060b14;
+  --panel: rgba(13, 22, 34, 0.66);
+  --panel-line: rgba(56, 189, 248, 0.16);
+  --ink: #e9f3f7;
+  --muted: #7d93a3;
+  --faint: #45596a;
+
+  --teal: #2dd4bf;
+  --cyan: #22d3ee;
+  --electric: #38bdf8;
+  --magenta: #f0529c;
+  --amber: #ffb020;
+  --green: #34d399;
+  --red: #fb5e6e;
+
+  --glow-cyan: 0 0 18px rgba(56, 189, 248, 0.45);
+  --glow-teal: 0 0 18px rgba(45, 212, 191, 0.4);
+
+  --radius: 16px;
+  --maxw: 1180px;
+
+  --font-display: var(--font-space-grotesk), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+  overflow-x: hidden;
+  /* Layered backdrop: two radial "nebula" glows over a faint perspective grid. */
+  background-image:
+    radial-gradient(
+      900px 600px at 78% -8%,
+      rgba(45, 212, 191, 0.1),
+      transparent 60%
+    ),
+    radial-gradient(
+      1100px 700px at 10% 8%,
+      rgba(56, 189, 248, 0.1),
+      transparent 55%
+    ),
+    linear-gradient(var(--bg-2), var(--bg));
+  background-attachment: fixed;
+}
+
+/* Thin scan-grid overlay fixed behind all content. */
+.grid-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(circle at 50% 30%, black, transparent 78%);
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+a {
+  color: var(--electric);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---- Type ---------------------------------------------------------------- */
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  text-shadow: var(--glow-cyan);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.dim {
+  color: var(--muted);
+}
+
+/* ---- Hero ---------------------------------------------------------------- */
+
+.hero {
+  padding: 120px 0 64px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: clamp(2.6rem, 7vw, 5.2rem);
+  line-height: 1.02;
+  background: linear-gradient(180deg, #ffffff 10%, #9fd6ef 60%, #4aa6cf 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 26px rgba(56, 189, 248, 0.25));
+}
+
+.hero p {
+  max-width: 620px;
+  margin: 20px auto 0;
+  color: var(--muted);
+  font-size: 1.06rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--panel-line);
+  background: var(--panel);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink);
+  backdrop-filter: blur(8px);
+}
+
+.badge .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.dot.live {
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green);
+}
+.dot.synthetic {
+  background: var(--amber);
+  box-shadow: 0 0 10px var(--amber);
+}
+
+/* ---- Chart card ---------------------------------------------------------- */
+
+.card {
+  position: relative;
+  border: 1px solid var(--panel-line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.card::before {
+  /* top edge highlight */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(56, 189, 248, 0.7),
+    transparent
+  );
+}
+
+.card-head {
+  padding: 22px 24px 0;
+}
+.card-head h2 {
+  font-size: 1.5rem;
+}
+.card-head .sub {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  max-width: 70ch;
+}
+
+.canvas-host {
+  width: 100%;
+  height: 540px;
+  position: relative;
+}
+
+@media (max-width: 640px) {
+  .canvas-host {
+    height: 420px;
+  }
+}
+
+.section {
+  margin: 56px 0;
+}
+
+/* ---- Legend & stats ------------------------------------------------------ */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 16px 24px 22px;
+}
+.legend .item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+.legend .swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.statbar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1px;
+  background: var(--panel-line);
+  border-top: 1px solid var(--panel-line);
+}
+.statbar .stat {
+  background: var(--bg-2);
+  padding: 14px 18px;
+}
+.statbar .stat .k {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.statbar .stat .v {
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  color: var(--ink);
+  margin-top: 2px;
+}
+
+/* ---- HUD tooltip (rendered via drei Html) -------------------------------- */
+
+.hud {
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 14px));
+  min-width: 150px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--panel-line);
+  background: rgba(6, 11, 20, 0.92);
+  backdrop-filter: blur(6px);
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.55),
+    var(--glow-cyan);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+.hud .name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ink);
+}
+.hud .row {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.hud .row b {
+  color: var(--cyan);
+  font-weight: 500;
+}
+
+/* ---- Interactive trend legend -------------------------------------------- */
+
+.trend-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 24px 22px;
+}
+.trend-legend .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--panel-line);
+  background: rgba(13, 22, 34, 0.5);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    opacity 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+.trend-legend .chip:hover {
+  border-color: rgba(56, 189, 248, 0.55);
+  background: rgba(13, 22, 34, 0.85);
+}
+.trend-legend .chip.off {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+.trend-legend .chip.clear {
+  color: var(--muted);
+  border-style: dashed;
+}
+.trend-legend .swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid;
+}
+.trend-legend .chip .war {
+  color: var(--muted);
+}
+
+/* ---- Footer -------------------------------------------------------------- */
+
+footer {
+  border-top: 1px solid var(--panel-line);
+  margin-top: 80px;
+  padding: 28px 0 60px;
+  color: var(--faint);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.hint {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--faint);
+  letter-spacing: 0.04em;
+}

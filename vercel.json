@@ -1,8 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "comment": "Deploys are prebuilt-static via GitHub Actions (see .github/workflows/refresh.yml): the workflow builds web/ to a static export and pushes it with `vercel deploy --prebuilt`. Vercel itself runs no build. Routing/cleanUrls for the prebuilt output are set in .vercel/output/config.json at deploy time; this file just documents the project's framework-less, build-less setup.",
   "framework": null,
   "buildCommand": "",
-  "outputDirectory": "_site",
   "cleanUrls": true,
   "trailingSlash": false
 }

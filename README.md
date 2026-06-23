@@ -16,23 +16,47 @@ you'd reach for in an RNA-seq or proteomics workflow:
 | `app.R`             | interactive Shiny explorer (wOBA vs xwOBA trends) |
 | `05_export.R`       | copy figures to `/box/coder-demo` and post top player to Slack |
 
+## Architecture: R for data, TypeScript for the front end
+
+The public site is an animated **WebGL** experience built with **Next.js +
+TypeScript + react-three-fiber**, living in [`web/`](web/). R keeps doing what
+it's good at — fetching and shaping the data — and hands off to the front end as
+JSON:
+
+```
+R/01_fetch_data.R   FanGraphs fetch (+ synthetic fallback)   ─┐
+R/06_war_history.R  cumulative WAR time series                ─┤→ data/*.rds
+R/07_export_json.R  serialize the frames to JSON              ─┘→ web/public/data/*.json
+                                                                      │
+                                          Next.js (react-three-fiber) ┘→ web/out/ (static)
+```
+
+The charts are 3D where there's a real third axis (PCA, the wOBA/xwOBA volcano,
+contact quality) and animated-2D where 3D would distort the comparison (ERA−xERA,
+BABIP). See [`web/README.md`](web/README.md) for the front end.
+
+> The original Quarto notebook (`analysis.qmd`, `index.qmd`, `trends.qmd`) and the
+> `ggplot` figure scripts (`R/02_heatmap.R`–`R/04_pca.R`, `R/charts.R`) and Shiny
+> app (`app.R`) are the project's earlier incarnation and are kept for reference;
+> the live site is now the `web/` app.
+
 ## Live website & auto-refresh
 
-The notebook is published as a Quarto **website** at
-**[mariners.bsnel.com](https://mariners.bsnel.com)**, hosted on Vercel.
-
-Vercel has no R runtime, so it never renders anything itself — it only serves the
-static files in `_site/`. All rendering happens in GitHub Actions
+The site is published at **[mariners.bsnel.com](https://mariners.bsnel.com)**,
+hosted on Vercel. Vercel has no R runtime and runs no build — it only serves the
+prebuilt static files. Everything happens in GitHub Actions
 ([`.github/workflows/refresh.yml`](.github/workflows/refresh.yml)):
 
 1. **Game guard** — each morning (UTC cron, after FanGraphs' ~5–6am ET stats load)
    it asks the MLB Stats API whether the Mariners finished a game the night before.
    Off-days are skipped.
-2. **Render** — sets up R 4.5.2 + renv + Quarto, fetches the latest stats once, and
-   runs `quarto render` → `_site/`.
-3. **Data guard** — if the live fetch fell back to synthetic data, the deploy is
+2. **Fetch + export** — sets up R 4.5.2 + renv, fetches the latest stats once, and
+   runs `R/07_export_json.R` to write `web/public/data/*.json`.
+3. **Build** — `npm ci && npm run build` in `web/` produces the static export
+   (`web/out/`).
+4. **Data guard** — if the live fetch fell back to synthetic data, the deploy is
    skipped so the public site keeps its last good numbers.
-4. **Deploy** — pushes `_site/` to Vercel via the CLI (`vercel deploy --prebuilt`).
+5. **Deploy** — pushes `web/out/` to Vercel via the CLI (`vercel deploy --prebuilt`).
 
 Trigger a refresh by hand anytime from the repo's **Actions → Refresh Mariners
 site → Run workflow** (tick `force` to deploy regardless of the guards), or:
