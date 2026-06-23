@@ -333,6 +333,12 @@ message("Fetching 2026 Mariners pitching ...")
 pitching_raw <- try_fetch_pitching(SEASON, MARINERS_ABBR)
 pitching     <- if (is.null(pitching_raw)) synth_pitching() else normalize_pitching(pitching_raw)
 
+# FanGraphs/baseballr can return data.table-backed frames whose `[` dispatch
+# breaks head()/tail()/select() downstream — coerce to plain tibbles so every
+# consumer (the notebook, the landing page, the figure scripts) behaves the same.
+batting  <- tibble::as_tibble(batting)
+pitching <- tibble::as_tibble(pitching)
+
 saveRDS(batting,  here("data", "batting_2026.rds"))
 saveRDS(pitching, here("data", "pitching_2026.rds"))
 

@@ -65,8 +65,9 @@ glance <- batting |>
   ) |>
   dplyr::arrange(dplyr::desc(Diff))
 
-over  <- utils::head(glance, 5)
-under <- glance |> utils::tail(5) |> dplyr::arrange(Diff)
+over  <- dplyr::slice_max(glance, Diff, n = 5, with_ties = FALSE)
+under <- dplyr::slice_min(glance, Diff, n = 5, with_ties = FALSE) |>
+  dplyr::arrange(Diff)
 ```
 
 ::: {layout-ncol="2"}
